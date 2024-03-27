@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+
+/* coo */
+.main-container {
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+}
+
+.custom-navbar {
+  background-color: #0D3040;
+}
+
+.course-block {
+  background-color: #E3EDF8;
+  border-radius: 10px;
+}
