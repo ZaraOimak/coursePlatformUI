@@ -3,21 +3,19 @@ import axios from "axios";
 const baseUrl = 'http://localhost:8080/authors';
 
 export const fetchAuthors = () => {
-    return fetch(baseUrl)
-        .then(response => response.json());
+    return axios.get(baseUrl).then(response => response.data);
 };
 export const fetchAuthor = (uuid) => {
-    return axios.get(`${baseUrl}/${uuid}`).then(response => {return response.data});
+    return axios.get(`${baseUrl}/${uuid}`).then(response => {
+        return response.data;
+    });
+};
+export const deleteAuthor = (authorUUID) => {
+    return axios.delete(`${baseUrl}/${authorUUID}`);
 };
 
-
-export const createAuthor = (authorData) => {
-    return fetch(baseUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(authorData),
-    }).then(response => response.json());
+export const createOrUpdateAuthor = (authorData) => {
+    return axios.post(baseUrl, authorData);
 };
+
 
