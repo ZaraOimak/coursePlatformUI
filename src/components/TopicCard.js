@@ -1,9 +1,9 @@
-import { Box, Card, CardContent, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { fetchTopic } from "../api/topicsApi";
+import {Box, Card, CardContent, Typography} from "@mui/material";
+import React, {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {fetchTopic} from "../api/topicsApi";
 
-const TopicCard = ({ courseUuid, topicUuid }) => {
+const TopicCard = ({courseUuid, topicUuid}) => {
     const [topic, setTopic] = useState(null);
     const navigate = useNavigate();
 
@@ -22,8 +22,8 @@ const TopicCard = ({ courseUuid, topicUuid }) => {
     }
 
     return (
-        <Box sx={{ flexGrow: 1, maxWidth: '20%', flexBasis: '25%', m: 1 }}>
-            <Card sx={{ height: '100%' }} onClick={handleCardClick} style={{ cursor: 'pointer' }}>
+        <Box sx={{flexGrow: 1, maxWidth: '20%', flexBasis: '25%', m: 1}}>
+            <Card sx={{height: '100%'}} onClick={handleCardClick} style={{cursor: 'pointer'}}>
                 <CardContent>
                     <Typography gutterBottom variant="h6" component="h2">
                         {topic.name}

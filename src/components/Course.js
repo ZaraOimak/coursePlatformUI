@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
 import {
     Accordion,
     AccordionDetails,
@@ -13,49 +12,32 @@ import {
     Typography
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Header from '../pages/Header';
-import Footer from '../pages/Footer';
 import mediaCard from '../resources/Media.png';
 import {fetchAuthor} from "../api/authorsApi";
-import {fetchCourse} from "../api/coursesApi";
 import avatarImage from '../resources/authorAvatar.svg';
 import TopicCard from "./TopicCard";
 
-const Course = () => {
-    const {uuid} = useParams();
-    const [course, setCourse] = useState();
+const Course = ({course}) => {
     const [author, setAuthor] = useState();
 
     useEffect(() => {
-        let mounted = true;
-
-        fetchCourse(uuid).then(courseData => {
-            if (mounted) {
-                setCourse(courseData);
-                fetchAuthor(courseData.authorUuid).then(authorData => {
-                    if (mounted) {
-                        setAuthor(authorData);
-                    }
-                });
-            }
+        fetchAuthor(course.authorUuid).then(authorData => {
+            setAuthor(authorData);
         });
-        return () => {
-            mounted = false;
-        };
-    }, [uuid]);
+
+    }, [course]);
 
     if (!course || !author) {
         return <div>Loading...</div>;
     }
     return (<>
-        <Header/>
         <div className="main-container" style={{
             backgroundColor: '#e3edf8', paddingBottom: '100px', minHeight: 'calc(100vh - 100px)'
         }}>
             <Container>
-                <Box sx={{display: 'flex', justifyContent: 'left', mb: 2}}>
-                    <Typography variant="h5" gutterBottom>
-                        ОСНОВЫ РАЗРАБОТКИ НА REACT: БАЗОВЫЙ КУРС
+                <Box sx={{display: 'flex', justifyContent: 'left', mt: 10, mb: 2}}>
+                    <Typography variant="h5" textTransform="uppercase" gutterBottom>
+                        {course.name}
                     </Typography>
                 </Box>
 
@@ -90,15 +72,12 @@ const Course = () => {
                         </Box>
 
                         <Typography variant="body2" color="text.secondary">
-                            Курс состоит из 4 модулей по 10 уроков с упражнениями. Вы изучите базовый синтаксис
-                            React и
-                            создадите свой первый проект lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                            sed do
-                            eiusmod tempor
+                            {course.description}
                         </Typography>
                     </Box>
                 </Box>
-                <Typography variant="h5" color="text.secondary" gutterBottom sx={{mt: 4}}>
+                <Typography variant="h5" color="text.secondary" textTransform="uppercase" gutterBottom
+                            sx={{mt: 6, mb: 3}}>
                     СТРУКТУРА КУРСА
                 </Typography>
                 <Card>
@@ -113,7 +92,7 @@ const Course = () => {
                                         display: 'flex', flexWrap: 'wrap', justifyContent: "center", gap: 2
                                     }}>
                                         {section.topicsIds.map((topicUuid) => (
-                                            <TopicCard courseUuid={uuid} topicUuid={topicUuid}/>))}
+                                            <TopicCard courseUuid={course.uuid} topicUuid={topicUuid}/>))}
                                     </Box>
                                 </AccordionDetails>
                             </Accordion>))}
@@ -121,7 +100,6 @@ const Course = () => {
                 </Card>
             </Container>
         </div>
-        <Footer/>
     </>);
 };
 

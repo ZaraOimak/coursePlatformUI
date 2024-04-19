@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 
-const CustomButton = ({ onClick, children }) => {
+const CustomButton = ({onClick, children}) => {
     return (
         <Button
             variant="outline-info"

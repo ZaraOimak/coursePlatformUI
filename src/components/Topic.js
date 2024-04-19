@@ -1,26 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
-import {Container, Typography, Paper, Box, Divider} from '@mui/material';
-import {fetchTopic} from "../api/topicsApi";
-import Footer from "../pages/Footer";
-import Header from "../pages/Header";
+import React from 'react';
+import {Box, Container, Typography} from '@mui/material';
 import ReactMarkdown from 'react-markdown';
 
-const LessonDetail = () => {
-    const {courseUuid, topicUuid} = useParams();
-    const [topic, setTopic] = useState(null);
-
-    useEffect(() => {
-        fetchTopic(courseUuid, topicUuid).then(setTopic);
-    }, [courseUuid, topicUuid]);
-
-    if (!topic) {
-        return <Typography>Loading...</Typography>;
-    }
+const Topic = ({topic}) => {
 
     return (
         <>
-            <Header/>
             <div className="main-container"
                  style={{backgroundColor: '#e3edf8', minHeight: 'calc(100vh - 100px)', paddingBottom: '100px'}}>
                 <Container>
@@ -40,7 +25,7 @@ const LessonDetail = () => {
                             <Typography variant="h6" gutterBottom>
                                 {block.name}
                             </Typography>
-                            <Paper elevation={4} sx={{p: 2, my: 2}}>
+                            <Box sx={{backgroundColor: '#e3edf8', p: 2, my: 2}}>
                                 {block.resources.map((resource, resourceIndex) => (
                                     <div key={resourceIndex}>
                                         {resource.resourceType === 'TEXT' && (
@@ -62,15 +47,13 @@ const LessonDetail = () => {
                                         )}
                                     </div>
                                 ))}
-                            </Paper>
-                            <Divider sx={{my: 2}}/>
+                            </Box>
                         </Box>
                     ))}
                 </Container>
             </div>
-            <Footer/>
         </>
     );
 };
 
-export default LessonDetail;
+export default Topic;

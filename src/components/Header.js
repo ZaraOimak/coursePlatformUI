@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {Button, Container, FormControl, Navbar, Form, InputGroup, Modal} from 'react-bootstrap';
+import {Button, Container, Form, FormControl, InputGroup, Modal, Navbar} from 'react-bootstrap';
 import logo from '../resources/Logo.svg';
 import searchIcon from '../resources/Search.svg';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import CustomButton from '../components/CustomButton';
+import CustomButton from './CustomButton';
 import axios from 'axios';
 
 const fetchLogin = (uuid) => {

@@ -1,5 +1,5 @@
-import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@mui/material';
-import { useNavigate } from 'react-router';
+import {Card, CardActionArea, CardContent, CardMedia, Typography} from '@mui/material';
+import {useNavigate} from 'react-router';
 import cardCover from '../resources/Card cover.png';
 
 const CourseCard = ({course}) => {
@@ -14,9 +14,9 @@ const CourseCard = ({course}) => {
                 component="img"
                 image={cardCover}
                 alt="Course Cover"
-                sx={{ height: 130, width: 245 }}
+                sx={{height: 130, width: 245}}
             />
-            <CardContent sx={{ height: 130, width: 245 }}>
+            <CardContent sx={{height: 130, width: 245}}>
                 <Typography gutterBottom variant="h5" component="div">
                     {course.name}
                 </Typography>
