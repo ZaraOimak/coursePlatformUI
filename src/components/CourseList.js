@@ -5,17 +5,15 @@ import CourseCard from './CourseCard';
 
 const CourseList = () => {
     const [courses, setCourses] = useState([]);
+    const authorUUID = localStorage.getItem('authorUUID');
 
     useEffect(() => {
-        const fetchAndSetCourses = async () => {
-            const response = await fetchCourses();
-            const authorUUID = localStorage.getItem('authorUUID');
+        fetchCourses().then(response => {
             const filteredCourses = authorUUID ? response.data.filter(course => course.authorUuid === authorUUID) : response.data;
             setCourses(filteredCourses);
-        };
+        })
+    }, [authorUUID]);
 
-        fetchAndSetCourses();
-    }, []);
     return (
         <>
             <div className="main-container"
@@ -23,7 +21,7 @@ const CourseList = () => {
                 <Container>
                     <Typography variant="h3" className="text-start mt-5 mb-5">Мои онлайн курсы</Typography>
                     <Grid container sx={{width: 1060}}>
-                        {courses.map((course, index) => (
+                        {courses.map((course) => (
                             <Grid item key={course.uuid} sx={{marginTop: '30px', marginRight: '20px'}}>
                                 <CourseCard course={course}/>
                             </Grid>
