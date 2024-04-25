@@ -1,58 +1,117 @@
 import React from 'react';
-import {Box, Container, Typography} from '@mui/material';
-import ReactMarkdown from 'react-markdown';
+import {Box, Button, Container, Typography} from '@mui/material';
+import {useNavigate} from "react-router-dom";
+import MarkdownIt from 'markdown-it';
 
-const Topic = ({topic}) => {
+const Topic = ({topic, courseUuid}) => {
+    const navigate = useNavigate();
+    const buttonSx = {
+        textTransform: 'none',
+        fontSize:16,
+        borderRadius: '15px',
+        padding: '24px 20px',
+        ':hover': {
+            backgroundColor: (theme) => theme.palette.success.main,
+            filter: 'brightness(110%)',
+        },
+        ':disabled': {
+            backgroundColor: '#CAC4D0',
+            color: 'black',
+        },
+        minWidth: 'fit-content',
+        color: 'black',
+    };
+
+    const onPrevious = () => {
+        if (topic.previousTopicUuid) {
+            navigate(`/course/${courseUuid}/topic/${topic.previousTopicUuid}`);
+        }
+    };
+
+    const onNext = () => {
+        if (topic.nextTopicUuid) {
+            navigate(`/course/${courseUuid}/topic/${topic.nextTopicUuid}`);
+        }
+    };
+
+
+    const mdParser = new MarkdownIt();
 
     return (
-        <>
-            <div className="main-container"
-                 style={{backgroundColor: '#e3edf8', minHeight: 'calc(100vh - 100px)', paddingBottom: '100px'}}>
-                <Container>
-                    <Typography variant="h4" gutterBottom>
-                        {topic.name}
-                    </Typography>
-
-                    <ReactMarkdown>
-                        {">Вторая строка цитаты. *Это курсив*  ###Заголовок 1 ![Alt-текст](https://masterpiecer-images.s3.yandex.net/37d9d9d5799f11ee99fbbadf81d486ab:upscaled)"}
-                    </ReactMarkdown>
-
-                    <ReactMarkdown>
-                        {topic.description}
-                    </ReactMarkdown>
-                    {topic.blocks.map((block, index) => (
-                        <Box key={index} sx={{my: 4}}>
-                            <Typography variant="h6" gutterBottom>
-                                {block.name}
-                            </Typography>
-                            <Box sx={{backgroundColor: '#e3edf8', p: 2, my: 2}}>
-                                {block.resources.map((resource, resourceIndex) => (
-                                    <div key={resourceIndex}>
-                                        {resource.resourceType === 'TEXT' && (
-                                            <ReactMarkdown>
-                                                {resource.content}
-                                            < /ReactMarkdown>
-                                        )}
-                                        {resource.resourceType === 'IMAGE' && (
-                                            <img src={resource.content} alt={`Resource ${resourceIndex}`}
-                                                 style={{width: '100%', height: 'auto'}}/>
-                                        )}
-                                        {resource.resourceType === 'VIDEO' && (
-                                            <iframe width="560" height="315"
-                                                    src={resource.content}
-                                                    title="YouTube video player" frameBorder="0"
-                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                                    referrerPolicy="strict-origin-when-cross-origin"
-                                                    allowFullScreen></iframe>
-                                        )}
-                                    </div>
-                                ))}
-                            </Box>
+        <div style={{backgroundColor: '#e3edf8', minHeight: 'calc(100vh - 100px)', paddingBottom: '100px'}}>
+            <Container>
+                <Typography variant="h4" gutterBottom>
+                    {topic.name}
+                </Typography>
+                <Typography>
+                    {topic.description}
+                </Typography>
+                {topic.blocks.map((block, index) => (
+                    <Box key={index} sx={{my: 4}}>
+                        <Typography variant="h6" gutterBottom>
+                            {block.name}
+                        </Typography>
+                        <Box sx={{backgroundColor: '#e3edf8', p: 2, my: 2}}>
+                            {block.resources.map((resource, resourceIndex) => (
+                                <div key={resourceIndex}>
+                                    {resource.resourceType === 'TEXT' && (
+                                        <div dangerouslySetInnerHTML={{ __html: mdParser.render(resource.content) }} />
+                                    )}
+                                    {resource.resourceType === 'IMAGE' && (
+                                        <img src={resource.content} alt={`Resource ${resourceIndex}`}
+                                             style={{width: '100%', height: 'auto'}}/>
+                                    )}
+                                    {resource.resourceType === 'VIDEO' && (
+                                        <div style={{
+                                            position: 'relative',
+                                            paddingBottom: '56.25%',
+                                            height: 0,
+                                            overflow: 'hidden'
+                                        }}>
+                                            <iframe
+                                                src={resource.content}
+                                                title="Embedded video"
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: 0,
+                                                    left: 0,
+                                                    width: '100%',
+                                                    height: '100%'
+                                                }}
+                                                frameBorder="0"
+                                                allowFullScreen
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
                         </Box>
-                    ))}
-                </Container>
-            </div>
-        </>
+                    </Box>
+                ))}
+                <Box sx={{display: 'flex', justifyContent: 'space-between', my: 4}}>
+                    <Button
+                        onClick={onPrevious}
+                        disabled={!topic.previousTopicUuid}
+                        sx={{
+                            ...buttonSx,
+                            backgroundColor: topic.previousTopicUuid ? '#50F1BE' : undefined,
+                        }}
+                    >
+                        Предыдущий урок
+                    </Button>
+                    <Button
+                        onClick={onNext}
+                        disabled={!topic.nextTopicUuid}
+                        sx={{
+                            ...buttonSx,
+                            backgroundColor: topic.nextTopicUuid ? '#50F1BE' : undefined,
+                        }}
+                    >
+                        Следующий урок
+                    </Button>
+                </Box>
+            </Container>
+        </div>
     );
 };
 

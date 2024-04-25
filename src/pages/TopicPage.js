@@ -16,7 +16,7 @@ const TopicPage = () => {
     return <>
         <Header/>
         {
-            topic ? <Topic topic={topic}/> : <div>Loading... </div>
+            topic ? <Topic topic={topic} courseUuid={courseUuid}/> : <div>Loading... </div>
         }
         <Footer/>
     </>
