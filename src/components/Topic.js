@@ -2,6 +2,7 @@ import React from 'react';
 import {Box, Button, Container, Typography} from '@mui/material';
 import {useNavigate} from "react-router-dom";
 import MarkdownIt from 'markdown-it';
+import ReactPlayer from "react-player";
 
 const Topic = ({topic, courseUuid}) => {
     const navigate = useNavigate();
@@ -62,27 +63,17 @@ const Topic = ({topic, courseUuid}) => {
                                              style={{width: '100%', height: 'auto'}}/>
                                     )}
                                     {resource.resourceType === 'VIDEO' && (
-                                        <div style={{
-                                            position: 'relative',
-                                            paddingBottom: '56.25%',
-                                            height: 0,
-                                            overflow: 'hidden'
-                                        }}>
-                                            <iframe
-                                                src={resource.content}
-                                                title="Embedded video"
-                                                style={{
-                                                    position: 'absolute',
-                                                    top: 0,
-                                                    left: 0,
-                                                    width: '100%',
-                                                    height: '100%'
-                                                }}
-                                                frameBorder="0"
-                                                allowFullScreen
+                                        <div style={{ position: 'relative',width:'100%',height:'100%'}}>
+                                            <ReactPlayer
+                                                url={resource.content}
+                                                width="100%"
+                                                height="100%"
+                                                controls
                                             />
                                         </div>
                                     )}
+
+
                                 </div>
                             ))}
                         </Box>

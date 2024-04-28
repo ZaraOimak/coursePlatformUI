@@ -28,21 +28,27 @@ const Header = () => {
     const handleLogin = (event) => {
         event.preventDefault();
         const uuid = new FormData(event.target).get("uuid");
+        const password = new FormData(event.target).get("password");
 
+        if (password !== "admin") {
+            alert("Неверный пароль!");
+            return;
+        }
         fetchLogin(uuid).then(data => {
             if (data.isValid) {
                 localStorage.setItem('authorUUID', uuid);
                 setIsLoggedIn(true);
-                alert("Login successful! Welcome, " + data.author.name);
+                alert("Авторизация успешна, добро пожаловать " + data.author.name);
                 handleCloseRegisterModal();
                 window.location.reload();
             } else {
-                alert(`Login failed: ${data.error}`);
+                alert(`Неуспешная авторизация: ${data.error}`);
             }
         }).catch(error => {
-            alert(`An error occurred: ${error.message}`);
+            alert(`Произошла ошибка: ${error.message}`);
         });
     };
+
 
     const handleLogout = () => {
         localStorage.removeItem('authorUUID');
@@ -101,20 +107,18 @@ const Header = () => {
                     <h5 style={{color: 'black'}}>Войдите, чтобы редактировать курсы</h5>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form onSubmit={handleLogin}>
-                        <Form.Group controlId="uuid">
-                            <Form.Control type="text" placeholder="Введите ваш UUID" name="uuid"
-                                          style={{width: '100%', height: '50px'}}/>
+                    <Form onSubmit={handleLogin} className="d-flex flex-column align-items-center">
+                        <Form.Group controlId="uuid" className="w-75">
+                            <Form.Control type="text" placeholder="Логин" name="uuid" className="mb-3"/>
                         </Form.Group>
-                        <Button type="submit" variant="primary" style={{
-                            backgroundColor: '#50F1BE',
-                            display: 'block',
-                            width: '100%',
-                            margin: '20px auto'
-                        }}>
+                        <Form.Group controlId="password" className="w-75">
+                            <Form.Control type="password" placeholder="Пароль" name="password" className="mb-3"/>
+                        </Form.Group>
+                        <Button type="submit" variant="primary" className="w-75" style={{backgroundColor: '#50F1BE'}}>
                             Войти в аккаунт
                         </Button>
                     </Form>
+
                 </Modal.Body>
             </Modal>
         </>
