@@ -15,6 +15,13 @@ export const deleteCourse = (courseUUID) => {
 };
 
 export const createOrUpdateCourse = (courseData) => {
-    return axios.post(baseUrl, courseData);
-};
+    // Если у courseData есть свойство uuid, то это обновление курса
+    if (courseData.uuid) {
+        // Используем POST запрос для обновления курса
+        return axios.post(baseUrl, courseData);
+    } else {
 
+        // Используем POST запрос для создания нового курса
+        return axios.post(baseUrl, courseData);
+    }
+};

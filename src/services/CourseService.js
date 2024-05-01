@@ -9,6 +9,7 @@ class CourseService {
             sections: []
         };
     };
+
 }
 
 export default CourseService;

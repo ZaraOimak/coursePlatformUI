@@ -1,79 +1,54 @@
-import React, { useState } from 'react';
-import { Card, CardActionArea, CardContent, CardMedia, Typography, IconButton, TextField } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Card, CardActionArea, CardContent, CardMedia, IconButton, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import cardCover from '../resources/Card cover.png';
 import UpdateCourseIcon from '../resources/border_color.svg';
+import { fetchAuthor } from "../api/authorsApi";
 
 const CourseCard = ({ course, isLoggedIn }) => {
     const navigate = useNavigate();
-    const [isEditing, setIsEditing] = useState(false);
-    const [newName, setNewName] = useState(course.name);
-    const [newDescription, setNewDescription] = useState(course.description);
+    const [author, setAuthor] = useState();
+
+    useEffect(() => {
+        fetchAuthor(course.authorUuid).then(authorData => {
+            setAuthor(authorData);
+        });
+    }, [course.authorUuid]);
 
     const openCourse = () => {
-        navigate(`/course/${course.uuid}`);
-    };
-
-    const handleEditCourse = () => {
-        setIsEditing(true); // Включить режим редактирования
-    };
-
-    const handleSaveChanges = () => {
-        // Сохранение изменений имени и описания курса
-        setIsEditing(false); // Завершение редактирования
-        // Отправка данных на сервер или другие необходимые действия
+        if (isLoggedIn) {
+            // Перенаправление на страницу редактирования, если пользователь залогинен
+            navigate(`/course/edit/${course.uuid}`);
+        } else {
+            // В противном случае, открытие страницы курса
+            navigate(`/course/${course.uuid}`);
+        }
     };
 
     return (
         <Card>
-            <CardActionArea >
-                <CardMedia onClick={isEditing ? undefined : openCourse}
-                           component="img"
-                           image={cardCover}
-                           alt="Course Cover"
-                           sx={{ height: 130, width: 245 }}
+            <CardActionArea onClick={openCourse}>
+                <CardMedia
+                    component="img"
+                    image={cardCover}
+                    alt="Course Cover"
+                    sx={{ height: 130, width: 245 }}
                 />
-                <CardContent sx={{ height: 130, width: 245, overflowY: 'auto' }}>
-                    {isEditing ? (
-                        <>
-                            <TextField
-                                fullWidth
-                                label="Название курса"
-                                variant="outlined"
-                                value={newName}
-                                onChange={(e) => setNewName(e.target.value)}
-                                sx={{ marginBottom: 1 }}
-                            />
-                            <TextField
-                                fullWidth
-                                multiline
-                                minRows={3}
-                                label="Описание курса"
-                                variant="outlined"
-                                value={newDescription}
-                                onChange={(e) => setNewDescription(e.target.value)}
-                            />
-                        </>
-                    ) : (
-                        <>
-                            <Typography gutterBottom variant="h5" component="div">
-                                {course.name}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                {course.description}
-                            </Typography>
-                        </>
-                    )}
-                    {isLoggedIn && (
-                        <IconButton
-                            disabled={isEditing}
-                            onClick={isEditing ? handleSaveChanges : handleEditCourse}
-                            sx={{ position: 'absolute', bottom: 0, right: 0 }}
-                        >
-                            <img src={UpdateCourseIcon} alt="update course icon"/>
-                        </IconButton>
-                    )}
+                <CardContent sx={{ height: 130, width: 245 }}>
+                    <Typography gutterBottom variant="h6" component="div">
+                        {course.name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        {author ? author.name : 'Автор не найден'}
+                    </Typography>
                 </CardContent>
+                {isLoggedIn && (
+                    <IconButton
+                        sx={{ position: 'absolute', bottom: 0, right: 0 }}
+                    >
+                        <img src={UpdateCourseIcon} alt="update course icon" />
+                    </IconButton>
+                )}
             </CardActionArea>
         </Card>
     );
