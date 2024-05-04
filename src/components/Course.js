@@ -23,7 +23,7 @@ import TopicCard from "./TopicCard";
 import {createOrUpdateCourse, deleteCourse} from "../api/coursesApi";
 import deleteCourseIcon from '../resources/delete.svg';
 import addNewSection from '../resources/add_circle.svg';
-import iconTrailing from '../resources/Trailing element.svg'; // Иконка добавления нового модуля
+import iconTrailing from '../resources/Trailing element.svg';
 import dragIndicator from '../resources/drag_indicator.svg';
 import {useNavigate} from "react-router-dom";
 
@@ -39,6 +39,7 @@ const Course = ({ course }) => {
     const [addedSections, setAddedSections] = useState([]);
     const [anchorEl, setAnchorEl] = React.useState(null); // Состояние якоря для Popover
     const navigate = useNavigate();
+    const [selectedSectionUuid, setSelectedSectionUuid] = useState(null); // Определение состояния для хранения выбранного sectionUuid
 
     useEffect(() => {
         fetchAuthor(course.authorUuid).then(authorData => {
@@ -118,30 +119,17 @@ const Course = ({ course }) => {
         setUpdatedCourse(updatedCourseCopy);
     };
 
-    const handleClick = (event) => {
+    const handleClick = (event, sectionUuid) => {
+        event.stopPropagation();
         setAnchorEl(event.currentTarget); // Устанавливаем якорь для Popover
+        setSelectedSectionUuid(sectionUuid); // Сохраняем значение sectionUuid
     };
     const handleClose = () => {
         setAnchorEl(null); // Закрываем Popover
     };
     const open = Boolean(anchorEl); // Проверяем, открыт ли Popover
     const id = open ? 'popover-basic' : undefined;
-    // Функция для добавления урока
-    const handleAddLesson = async () => {
-        try {
-            // Сохраняем обновленные данные курса перед добавлением урока
-            await handleSave();
 
-            // Перенаправляем пользователя на страницу редактирования курса и добавления нового урока
-
-
-            navigate(`/course/${updatedCourse.uuid}/topic/new`);
-        } catch (error) {
-            console.error('Ошибка при добавлении урока:', error);
-            // Обработка ошибки добавления урока
-        }
-        handleClose(); // Закрываем Popover после выполнения операции
-    };
 
     if (!updatedCourse || !author) {
         return <div>Loading...</div>;
@@ -239,94 +227,103 @@ const Course = ({ course }) => {
                     </Typography>
                     <Card>
                         <CardContent>
-                            {updatedCourse.sections.map((section, sectionIndex) => (
-                                <Accordion key={sectionIndex} sx={{marginBottom: 2, position: 'relative'}}>
-                                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                                        {isLoggedIn && isEditing ? (
-                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                <TextField
-                                                    value={section.name}
-                                                    onChange={(e) => handleSectionNameChange(sectionIndex, e.target.value)}
-                                                    label="Название модуля"
-                                                    sx={{width: '300px', wordWrap: 'break-word'}}
-                                                />
-                                            </Box>
-                                        ) : (
-                                            <Box sx={{display: 'flex', alignItems: 'center'}}>
-                                                <img src={dragIndicator} alt="add module icon"
-                                                     style={{width: '24px', height: '24px', marginRight: '8px'}}/>
-                                                <Typography variant="h6">{section.name}</Typography>
-                                            </Box>
-                                        )}
-                                        {isLoggedIn && isEditing ? (
-                                            <IconButton
-                                                sx={{
-                                                    width: '40px',
-                                                    height: '40px',
+                            {updatedCourse.sections.map((section, sectionIndex) => {
+                                const sectionUuid = section.uuid; // Сохраняем значение section.uuid для каждого модуля
+                                return (
+                                    <Accordion key={sectionIndex} sx={{marginBottom: 2, position: 'relative'}}>
+                                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                                            {isLoggedIn && isEditing ? (
+                                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                    <TextField
+                                                        value={section.name}
+                                                        onChange={(e) => handleSectionNameChange(sectionIndex, e.target.value)}
+                                                        label="Название модуля"
+                                                        sx={{width: '300px', wordWrap: 'break-word'}}
+                                                    />
+                                                    {sectionUuid}
+                                                </Box>
+                                            ) : (
+                                                <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                                    <img src={dragIndicator} alt="add module icon"
+                                                         style={{width: '24px', height: '24px', marginRight: '8px'}}/>
+                                                    <Typography variant="h6">{section.name}</Typography>
+                                                </Box>
+                                            )}
+                                            {isLoggedIn && isEditing ? (
+                                                <IconButton
+                                                    sx={{
+                                                        width: '40px',
+                                                        height: '40px',
+                                                        position: 'absolute',
+                                                        right: 0,
+                                                        top: '50%',
+                                                        marginRight: '64px',
+                                                        transform: 'translateY(-50%)'
+                                                    }}
+                                                    onClick={(e) => handleClick(e, section.uuid)} // Передаем section.uuid в handleClick
+                                                >
+                                                    <img src={iconTrailing} alt="iconTr icon" />
+                                                </IconButton>
 
-
-                                                    position: 'absolute',
-                                                    right: 0,
-                                                    top: '50%',
-                                                    marginRight: '64px',
-                                                    transform: 'translateY(-50%)'
+                                            ) : (
+                                                <></>
+                                            )}
+                                            <Popover
+                                                id={id}
+                                                open={open}
+                                                anchorEl={anchorEl}
+                                                onClose={handleClose}
+                                                anchorOrigin={{
+                                                    vertical: 'top',
+                                                    horizontal: 'right',
                                                 }}
-                                                onClick={(e) => e.stopPropagation()} // Добавляем обработчик события и вызываем stopPropagation()
+                                                transformOrigin={{
+                                                    vertical: 'bottom',
+                                                    horizontal: 'left',
+                                                }}
                                             >
-                                                <img src={iconTrailing} alt="iconTr icon" onClick={handleClick}/>
-                                            </IconButton>) : (
-                                            <></>
-                                        )}
-                                        <Popover
-                                            id={id}
-                                            open={open}
-                                            anchorEl={anchorEl}
-                                            onClose={handleClose}
-                                            anchorOrigin={{
-                                                vertical: 'top',
-                                                horizontal: 'right',
-                                            }}
-                                            transformOrigin={{
-                                                vertical: 'bottom',
-                                                horizontal: 'left',
-                                            }}
-                                        >
-                                            <Box sx={{width: 188}}>
-                                                <Button variant="contained" onClick={handleAddLesson}
-                                                        sx={{
-                                                            backgroundColor: 'white',
-                                                            color: 'black',
-                                                            opacity: 1,
-                                                            height: '56px',
-                                                            width: '100%'
-                                                        }}>Добавить
-                                                    урок
-                                                </Button>
+                                                <Box sx={{width: 188}}>
+                                                    <Button variant="contained"
+                                                            onClick={() => {
+                                                                navigate(`/course/${course.uuid}/topic/new?sectionUuid=${selectedSectionUuid}`);
+                                                            }}
+                                                            sx={{
+                                                                backgroundColor: 'white',
+                                                                color: 'black',
+                                                                opacity: 1,
+                                                                height: '100px',
+                                                                width: '100%'
+                                                            }}>Добавить
+                                                        урок
+                                                    </Button>
 
 
-                                                <Button variant="contained" onClick={
-                                                    () => handleDeleteSection(sectionIndex)
-                                                }
-                                                        sx={{
-                                                            backgroundColor: 'white',
-                                                            color: 'black',
-                                                            opacity: 1,
-                                                            height: '56px',
-                                                            width: '100%'
-                                                        }}>Удалить
-                                                    модуль</Button>
+                                                    <Button variant="contained" onClick={
+                                                        () => handleDeleteSection(sectionIndex)
+                                                    }
+                                                            sx={{
+                                                                backgroundColor: 'white',
+                                                                color: 'black',
+                                                                opacity: 1,
+                                                                height: '56px',
+                                                                width: '100%'
+                                                            }}>Удалить
+                                                        модуль</Button>
+                                                </Box>
+                                            </Popover>
+                                        </AccordionSummary>
+                                        <AccordionDetails sx={{display: 'flex', alignItems: 'center'}}>
+                                            <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: "center", gap: 2}}>
+                                                {section.topicsIds.map((topicUuid) => (
+                                                    <TopicCard key={topicUuid} courseUuid={updatedCourse.uuid} topicUuid={topicUuid} />
+                                                ))}
                                             </Box>
-                                        </Popover>
-                                    </AccordionSummary>
-                                    <AccordionDetails sx={{display: 'flex', alignItems: 'center'}}>
-                                        <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: "center", gap: 2}}>
-                                            {section.topicsIds.map((topicUuid) => (
-                                                <TopicCard key={topicUuid} courseUuid={updatedCourse.uuid} topicUuid={topicUuid} />
-                                            ))}
-                                        </Box>
-                                    </AccordionDetails>
-                                </Accordion>
-                            ))}
+                                        </AccordionDetails>
+                                    </Accordion>
+                                );
+
+                            })}
+
                             {isLoggedIn && isEditing && (
                                 <AccordionDetails onClick={handleAddSection} sx={{
                                     display: 'flex',

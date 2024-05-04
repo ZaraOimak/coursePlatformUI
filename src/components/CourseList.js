@@ -42,7 +42,6 @@ const CourseList = () => {
                     {isLoggedIn && (
                         <Button
                             onClick={() => {
-                                const emptyCourse = courseService.createEmptyCourse(authorUUID);
                                 navigate(`/course/new`);
                             }}
                             style={{
