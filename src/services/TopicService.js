@@ -1,9 +1,8 @@
 class TopicService {
     createEmptyTopic = (sectionUuid) => {
         return {
-            uuid: '',
             sectionUuid: sectionUuid,
-            name: 'новый урок',
+            name: '',
             description: '',
             previousTopicUuid: null,
             nextTopicUuid: null,

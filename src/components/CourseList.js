@@ -3,11 +3,9 @@ import {Box, Container, Grid, IconButton, Typography} from '@mui/material';
 import { fetchCourses } from "../api/coursesApi";
 import CourseCard from './CourseCard';
 import { Button } from "react-bootstrap";
-import CourseService from "../services/CourseService";
 import { useNavigate } from "react-router-dom";
 import addNewCourse from '../resources/add_circle.svg';
 
-const courseService = new CourseService();
 
 const CourseList = () => {
     const [courses, setCourses] = useState([]);

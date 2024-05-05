@@ -31,7 +31,7 @@ import {useNavigate} from "react-router-dom";
 const Course = ({ course }) => {
     const [author, setAuthor] = useState();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [isEditing, setIsEditing] = useState(true);
+    const [isEditing] = useState(true);
     const [name, setName] = useState(course.name);
     const [description, setDescription] = useState(course.description);
     const [updatedCourse, setUpdatedCourse] = useState(course);
@@ -58,8 +58,7 @@ const Course = ({ course }) => {
             const updatedCourseData = {
                 ...updatedCourse,
                 name,
-                description,
-                sections: updatedCourse.sections.filter(section => section.topicsIds.length === 0)
+                description
             };
 
             console.log('Отправляем на сервер данные для сохранения:', updatedCourseData);
@@ -99,24 +98,35 @@ const Course = ({ course }) => {
             const addedSectionIndex = sectionIndex - course.sections.length;
             setAddedSections(prevSections => prevSections.filter((_, index) => index !== addedSectionIndex));
         }
+
+        // Удаляем секцию из обновленного курса
         const updatedSections = updatedCourse.sections.filter((section, index) => index !== sectionIndex);
         setUpdatedCourse(prevState => ({
             ...prevState,
             sections: updatedSections
         }));
         setAnchorEl(null);
-    };
 
+        // Вызываем handleSave после обновления состояния
+        handleSave();
+    };
 
     const handleAddSection = () => {
         const newSection = {
             name: "Новый модуль",
             topicsIds: []
         };
+
+        // Обновляем состояние добавленных секций
         setAddedSections(prevSections => [...prevSections, newSection]);
+
+        // Добавляем новую секцию к обновленному курсу
         const updatedCourseCopy = { ...updatedCourse };
         updatedCourseCopy.sections.push(newSection);
         setUpdatedCourse(updatedCourseCopy);
+
+        // Вызываем handleSave после обновления состояния
+        handleSave();
     };
 
     const handleClick = (event, sectionUuid) => {
@@ -130,6 +140,18 @@ const Course = ({ course }) => {
     const open = Boolean(anchorEl); // Проверяем, открыт ли Popover
     const id = open ? 'popover-basic' : undefined;
 
+    const handleAddTopic = async () => {
+        try {
+            await handleSave(); // Ожидаем завершения сохранения
+            if (selectedSectionUuid) { // Проверяем, что выбранная секция не равна null
+                navigate(`/course/${updatedCourse.uuid}/topic/new?sectionUuid=${selectedSectionUuid}`);
+            } else {
+                console.error('Не выбрана секция для добавления урока.');
+            }
+        } catch (error) {
+            console.error('Ошибка при добавлении урока:', error);
+        }
+    };
 
     if (!updatedCourse || !author) {
         return <div>Loading...</div>;
@@ -284,9 +306,7 @@ const Course = ({ course }) => {
                                             >
                                                 <Box sx={{width: 188}}>
                                                     <Button variant="contained"
-                                                            onClick={() => {
-                                                                navigate(`/course/${course.uuid}/topic/new?sectionUuid=${selectedSectionUuid}`);
-                                                            }}
+                                                            onClick={handleAddTopic}
                                                             sx={{
                                                                 backgroundColor: 'white',
                                                                 color: 'black',
@@ -379,7 +399,7 @@ const Course = ({ course }) => {
                                     <img src={deleteCourseIcon} alt="delete course icon"
                                          style={{width: '24px', height: '24px'}}/>
                                 </IconButton>
-                                Удалить урок
+                                Удалить курс
                             </Button>
                             <Button onClick={handleSave}
                                     sx={{

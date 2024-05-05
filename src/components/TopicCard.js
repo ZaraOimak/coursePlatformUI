@@ -14,7 +14,7 @@ const TopicCard = ({courseUuid, topicUuid}) => {
     }, [courseUuid, topicUuid]);
 
     const handleCardClick = () => {
-        navigate(`/course/${courseUuid}/topic/${topicUuid}`);
+        navigate(`/course/${courseUuid}/topic/edit/${topicUuid}`);
     };
 
     if (!topic) {
@@ -22,7 +22,7 @@ const TopicCard = ({courseUuid, topicUuid}) => {
     }
 
     return (
-        <Box sx={{flexGrow: 1, maxWidth: '20%', flexBasis: '25%', m: 1}}>
+        <Box sx={{flexGrow: 1, width: '20%', flexBasis: '25%', m: 1}}>
             <Card sx={{height: '100%'}} onClick={handleCardClick} style={{cursor: 'pointer'}}>
                 <CardContent>
                     <Typography gutterBottom variant="h6" component="h2">

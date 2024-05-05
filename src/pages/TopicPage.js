@@ -6,8 +6,6 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import TopicService from "../services/TopicService";
 
-const topicService = new TopicService();
-
 const TopicPage = () => {
     const { courseUuid, topicUuid } = useParams();
     const location = useLocation();
@@ -15,14 +13,14 @@ const TopicPage = () => {
     const sectionUuid = queryParams.get('sectionUuid');
     const [topic, setTopic] = useState(null);
 
+
     useEffect(() => {
-        if (!topicUuid) {
-            // Если topicUuid не передан, создаем пустой топик с sectionUuid
-            const emptyTopic = topicService.createEmptyTopic(sectionUuid);
-            setTopic(emptyTopic);
-        } else {
-            // Если topicUuid передан, загружаем топик
-            fetchTopic(courseUuid, topicUuid).then((topicData) => {
+        if(!topicUuid){
+            const topicService = new TopicService();
+            setTopic(topicService.createEmptyTopic(sectionUuid));
+        }
+        else{
+            fetchTopic(courseUuid,topicUuid).then((topicData) => {
                 setTopic(topicData);
             });
         }
@@ -31,8 +29,9 @@ const TopicPage = () => {
     return (
         <>
             <Header />
-            {topic ? <Topic topic={topic} courseUuid={courseUuid} /> : <div>Loading... </div>}
-            <Footer />
+            {/* Проверяем, загружены ли данные */}
+            {topic ? <Topic topic={topic} courseUuid={courseUuid}/> : <div>Loading...</div>}
+            <Footer/>
         </>
     );
 };
