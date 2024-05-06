@@ -26,6 +26,7 @@ import addNewSection from '../resources/add_circle.svg';
 import iconTrailing from '../resources/Trailing element.svg';
 import dragIndicator from '../resources/drag_indicator.svg';
 import {useNavigate} from "react-router-dom";
+import EditableTextField from "./editTextField";
 
 
 const Course = ({ course }) => {
@@ -176,15 +177,15 @@ const Course = ({ course }) => {
                                 wordWrap: 'break-word', // Перенос слов при необходимости
                             }}>
                                 {isLoggedIn && isEditing ? (
-                                    <TextField
+                                    <EditableTextField
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
-                                        label="Название курса"
+                                        placeholder="Название курса"
                                         inputProps={{maxLength: 55}}
-                                        fullWidth // Растягиваем текстовое поле на всю доступную ширину
+                                        fullWidth={true}
                                     />
                                 ) : (
-                                    name
+                                    <Typography>{name}</Typography>
                                 )}
                             </Typography>
                         </Box>
@@ -220,22 +221,21 @@ const Course = ({ course }) => {
                                 </Box>
 
                                 <Typography variant="body2" color="text.secondary" sx={{
-                                    width: '80%', // Настраиваем ширину текста на всю ширину контейнера
+                                    width: '100%', // Настраиваем ширину текста на всю ширину контейнера
                                     maxWidth: '580px', // Максимальная ширина описания курса
                                     wordWrap: 'break-word', // Перенос слов при необходимости
                                     marginBottom: 2, // Добавляем нижний отступ для разделения элементов
                                 }}>
                                     {isLoggedIn && isEditing ? (
-                                        <TextField
+                                        <EditableTextField
                                             value={description}
                                             onChange={(e) => setDescription(e.target.value)}
-                                            label="Описание курса"
-                                            multiline
-                                            rows={4}
-                                            fullWidth // Растягиваем текстовое поле на всю доступную ширину
+                                            placeholder="Описание курса"
+                                            inputProps={{maxLength: 150}}
+                                            fullWidth={true}
                                         />
                                     ) : (
-                                        description
+                                        <Typography>{description}</Typography>
                                     )}
                                 </Typography>
                             </Box>
@@ -256,13 +256,13 @@ const Course = ({ course }) => {
                                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                             {isLoggedIn && isEditing ? (
                                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                    <TextField
+                                                    <EditableTextField
                                                         value={section.name}
                                                         onChange={(e) => handleSectionNameChange(sectionIndex, e.target.value)}
-                                                        label="Название модуля"
-                                                        sx={{width: '300px', wordWrap: 'break-word'}}
+                                                        placeholder="Название модуля"
+                                                        inputProps={{maxLength: 100}}
+                                                        fullWidth={true}
                                                     />
-                                                    {sectionUuid}
                                                 </Box>
                                             ) : (
                                                 <Box sx={{display: 'flex', alignItems: 'center'}}>
