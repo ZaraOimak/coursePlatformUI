@@ -1,9 +1,9 @@
-import {Box, Card, CardContent, Typography} from "@mui/material";
-import React, {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
-import {fetchTopic} from "../api/topicsApi";
+import React, { useEffect, useState } from 'react';
+import { Card, CardContent, Typography, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { fetchTopic } from '../api/topicsApi';
 
-const TopicCard = ({courseUuid, topicUuid}) => {
+const TopicCard = ({ courseUuid, topicUuid }) => {
     const [topic, setTopic] = useState(null);
     const navigate = useNavigate();
 
@@ -22,9 +22,21 @@ const TopicCard = ({courseUuid, topicUuid}) => {
     }
 
     return (
-        <Box sx={{flexGrow: 1, width: '20%', flexBasis: '25%', m: 1}}>
-            <Card sx={{height: '100%'}} onClick={handleCardClick} style={{cursor: 'pointer'}}>
-                <CardContent>
+        <Box sx={{ minWidth: 326, maxWidth: 326, flexGrow: 1, margin: 1 }}>
+            <Card
+                sx={{
+                    height: '100%',
+                    cursor: 'pointer',
+                    transition: 'box-shadow 0.3s',
+                    ':hover': {
+                        boxShadow: '0 0 8px 2px #50F1BE'
+                    },
+                    display: 'flex',
+                    flexDirection: 'column'
+                }}
+                onClick={handleCardClick}
+            >
+                <CardContent sx={{ flexGrow: 1 }}>
                     <Typography gutterBottom variant="h6" component="h2">
                         {topic.name}
                     </Typography>

@@ -171,21 +171,21 @@ const Course = ({ course }) => {
                         maxWidth: '1000px', // Максимальная ширина контейнера курса
                     }}>
                         <Box sx={{display: 'flex', justifyContent: 'left', mt: 10, mb: 2}}>
-                            <Typography variant="h5" textTransform="uppercase" gutterBottom sx={{
+                            <Typography variant="h5" gutterBottom sx={{
                                 width: '100%', // Настраиваем ширину текста на всю ширину контейнера
                                 maxWidth: '800px', // Максимальная ширина названия курса
                                 wordWrap: 'break-word', // Перенос слов при необходимости
                             }}>
                                 {isLoggedIn && isEditing ? (
                                     <EditableTextField
+                                        name="name"
                                         value={name}
-                                        onChange={(e) => setName(e.target.value)}
+                                        onValueChange={(newValue) => setName(newValue)}
                                         placeholder="Название курса"
-                                        inputProps={{maxLength: 55}}
                                         fullWidth={true}
                                     />
                                 ) : (
-                                    <Typography>{name}</Typography>
+                                    <Typography variant="h5">{name}</Typography>
                                 )}
                             </Typography>
                         </Box>
@@ -223,15 +223,19 @@ const Course = ({ course }) => {
                                 <Typography variant="body2" color="text.secondary" sx={{
                                     width: '100%', // Настраиваем ширину текста на всю ширину контейнера
                                     maxWidth: '580px', // Максимальная ширина описания курса
+                                    height:'100%',
+                                    maxHeight:'240px',
                                     wordWrap: 'break-word', // Перенос слов при необходимости
                                     marginBottom: 2, // Добавляем нижний отступ для разделения элементов
                                 }}>
                                     {isLoggedIn && isEditing ? (
                                         <EditableTextField
+                                            name="description"
                                             value={description}
-                                            onChange={(e) => setDescription(e.target.value)}
+                                            onValueChange={(newValue) => setDescription(newValue)}
                                             placeholder="Описание курса"
-                                            inputProps={{maxLength: 150}}
+                                            multiline={true}
+                                            rows={4}
                                             fullWidth={true}
                                         />
                                     ) : (
@@ -250,17 +254,18 @@ const Course = ({ course }) => {
                     <Card>
                         <CardContent>
                             {updatedCourse.sections.map((section, sectionIndex) => {
-                                const sectionUuid = section.uuid; // Сохраняем значение section.uuid для каждого модуля
+
                                 return (
                                     <Accordion key={sectionIndex} sx={{marginBottom: 2, position: 'relative'}}>
                                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                                             {isLoggedIn && isEditing ? (
-                                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                <Box sx={{ display: 'flex', alignItems: 'center',width:'80%' }}>
                                                     <EditableTextField
+                                                        key={sectionIndex}
+                                                        name="sectionName"
                                                         value={section.name}
-                                                        onChange={(e) => handleSectionNameChange(sectionIndex, e.target.value)}
+                                                        onValueChange={(newValue) => handleSectionNameChange(sectionIndex, newValue)}
                                                         placeholder="Название модуля"
-                                                        inputProps={{maxLength: 100}}
                                                         fullWidth={true}
                                                     />
                                                 </Box>
@@ -311,7 +316,7 @@ const Course = ({ course }) => {
                                                                 backgroundColor: 'white',
                                                                 color: 'black',
                                                                 opacity: 1,
-                                                                height: '100px',
+                                                                height: '56px',
                                                                 width: '100%'
                                                             }}>Добавить
                                                         урок
@@ -333,7 +338,7 @@ const Course = ({ course }) => {
                                             </Popover>
                                         </AccordionSummary>
                                         <AccordionDetails sx={{display: 'flex', alignItems: 'center'}}>
-                                            <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: "center", gap: 2}}>
+                                            <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: "center"}}>
                                                 {section.topicsIds.map((topicUuid) => (
                                                     <TopicCard key={topicUuid} courseUuid={updatedCourse.uuid} topicUuid={topicUuid} />
                                                 ))}

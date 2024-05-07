@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Card, CardActionArea, CardContent, CardMedia, IconButton, Typography } from '@mui/material';
+import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import cardCover from '../resources/Card cover.png';
-import UpdateCourseIcon from '../resources/border_color.svg';
-import { fetchAuthor } from "../api/authorsApi";
+import {fetchAuthor} from "../api/authorsApi";
 
 const CourseCard = ({ course, isLoggedIn }) => {
     const navigate = useNavigate();
@@ -17,16 +16,19 @@ const CourseCard = ({ course, isLoggedIn }) => {
 
     const openCourse = () => {
         if (isLoggedIn) {
-            // Перенаправление на страницу редактирования, если пользователь залогинен
             navigate(`/course/edit/${course.uuid}`);
         } else {
-            // В противном случае, открытие страницы курса
             navigate(`/course/${course.uuid}`);
         }
     };
 
     return (
-        <Card>
+        <Card sx={{
+            transition: 'box-shadow 0.3s', // Плавный переход
+            ':hover': {
+                boxShadow: '0 0 8px 2px #50F1BE', // Тень по всему периметру карточки
+            }
+        }}>
             <CardActionArea onClick={openCourse}>
                 <CardMedia
                     component="img"
@@ -35,20 +37,13 @@ const CourseCard = ({ course, isLoggedIn }) => {
                     sx={{ height: 130, width: 245 }}
                 />
                 <CardContent sx={{ height: 130, width: 245 }}>
-                    <Typography gutterBottom variant="h6" component="div">
+                    <Typography gutterBottom variant="body1" component="div">
                         {course.name}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography sx={{color:"black"}} variant="body2" color="text.secondary">
                         {author ? author.name : 'Автор не найден'}
                     </Typography>
                 </CardContent>
-                {isLoggedIn && (
-                    <IconButton
-                        sx={{ position: 'absolute', bottom: 0, right: 0 }}
-                    >
-                        <img src={UpdateCourseIcon} alt="update course icon" />
-                    </IconButton>
-                )}
             </CardActionArea>
         </Card>
     );

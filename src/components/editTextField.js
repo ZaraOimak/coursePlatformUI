@@ -4,49 +4,48 @@ import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import Box from '@mui/material/Box';
 
-const EditableTextField = ({ value, onChange, placeholder, multiline = false, rows = 1, fullWidth = true }) => {
-    const [hover, setHover] = useState(false);
+const EditableTextField = ({ name, value, onValueChange, placeholder, multiline = false, rows = 1, fullWidth = true }) => {
+    const [active, setActive] = useState(false);
+
+    const handleMouseEnter = () => setActive(true);
+    const handleMouseLeave = () => setActive(false);
+    const handleFocus = () => setActive(true);
+    const handleBlur = () => setActive(false);
 
     return (
         <Box
-            onMouseEnter={() => setHover(true)}
-            onMouseLeave={() => setHover(false)}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
             sx={{
                 position: 'relative',
-                '&:hover': {
-                    backgroundColor: hover ? '#f0f0f0' : 'inherit', // серый фон при наведении
-                }
+                backgroundColor: active ? '#f0f0f0' : 'inherit',
             }}
         >
             <TextField
                 variant="outlined"
+                name={name}
                 value={value}
-                onChange={onChange}
-                placeholder={placeholder}  // Используем placeholder для отображения внутри поля
+                onChange={(e) => onValueChange(e.target.value)}
+                placeholder={placeholder}
                 multiline={multiline}
-                rows={multiline ? rows : 1}
+                rows={rows}
                 fullWidth={fullWidth}
                 InputProps={{
                     sx: {
-                        border: 'none', // убираем рамку
-                        '&:hover': {
-                            border: 'none' // убираем рамку при наведении
-                        },
+                        border: 'none',
                         '& .MuiOutlinedInput-notchedOutline': {
-                            border: 'none' // убираем рамку
+                            border: 'none',
                         },
                         '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                            border: 'none', // убираем рамку при фокусе
-                            boxShadow: '0 0 0 2px rgba(25, 118, 210, 0.5)' // добавляем тень для выделения при фокусе
+                            boxShadow: '0 0 0 2px rgba(25, 118, 210, 0.5)',
                         },
-                        autoComplete: "new-password"  // отключаем автозаполнение
+                        autoComplete: "new-password"
                     }
                 }}
-                sx={{
-                    backgroundColor: hover ? '#f0f0f0' : 'inherit', // серый фон при наведении
-                }}
             />
-            {hover && (
+            {active && (
                 <IconButton
                     sx={{
                         position: 'absolute',
