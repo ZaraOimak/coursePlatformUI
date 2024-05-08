@@ -10,6 +10,8 @@
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
     "@testing-library/user-event": "^14.5.2",
+    "@uiw/react-markdown-editor": "^6.1.1",
+    "@uiw/react-md-editor": "^4.0.4",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.2",
     "markdown-it": "^14.1.0",

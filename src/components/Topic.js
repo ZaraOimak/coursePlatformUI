@@ -5,7 +5,8 @@ import {createOrUpdateTopic, deleteTopic} from '../api/topicsApi';
 import TopicBlocksManager from './TopicBlocksManager';
 import EditableTextField from "./editTextField";
 import ReactPlayer from "react-player";
-import * as mdParser from "react-dom";
+import ReactMarkdown from 'react-markdown';
+
 
 const Topic = ({topic, courseUuid}) => {
     const navigate = useNavigate();
@@ -111,8 +112,9 @@ const Topic = ({topic, courseUuid}) => {
                                     {block.resources.map((resource, resourceIndex) => (
                                         <div key={resourceIndex}>
                                             {resource.resourceType === 'TEXT' && (
-                                                <div
-                                                    dangerouslySetInnerHTML={{__html: mdParser.render(resource.content)}}/>
+                                                <ReactMarkdown>
+                                                    {resource.content}
+                                                </ReactMarkdown>
                                             )}
                                             {resource.resourceType === 'IMAGE' && (
                                                 <img src={resource.content} alt={`Resource ${resourceIndex}`}

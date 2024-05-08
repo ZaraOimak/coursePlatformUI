@@ -1,6 +1,10 @@
 import React from 'react';
-import { Box, Button, TextField, MenuItem } from '@mui/material';
+import {Box, Button, MenuItem, TextField} from '@mui/material';
+import ReactPlayer from 'react-player';
+import MDEditor from '@uiw/react-md-editor'; // Импортируем Markdown редактор
+
 const TopicBlocksManager = ({ blocks, setBlocks }) => {
+    // Добавляем обработчики и логику как описано выше...
     const handleAddBlock = () => {
         const newBlock = {
             name: '',
@@ -62,46 +66,81 @@ const TopicBlocksManager = ({ blocks, setBlocks }) => {
         setBlocks(updatedBlocks);
     };
 
+
+    const renderResourceInput = (resource, index, blockIndex) => {
+        switch (resource.resourceType) {
+            case 'IMAGE':
+                return (
+                    <div>
+                        <TextField
+                            fullWidth
+                            label="URL изображения"
+                            value={resource.content}
+                            onChange={(e) => handleResourceChange(blockIndex, index, 'content', e.target.value)}
+                            margin="normal"
+                        />
+                        {resource.content &&
+                            <img src={resource.content} alt="Preview" style={{maxWidth: '100%', marginTop: '10px'}}/>}
+                    </div>
+                );
+            case 'VIDEO':
+                return (
+                    <div>
+                        <TextField
+                            fullWidth
+                            label="URL видео"
+                            value={resource.content}
+                            onChange={(e) => handleResourceChange(blockIndex, index, 'content', e.target.value)}
+                            margin="normal"
+                        />
+                        {resource.content &&
+                            <ReactPlayer url={resource.content} controls width="100%" style={{marginTop: '10px'}}/>}
+                    </div>
+                );
+            case 'TEXT':
+                return (
+                    <MDEditor
+                        value={resource.content}
+                        onChange={(value) => handleResourceChange(blockIndex, index, 'content', value)}
+                        height={600}
+                    />
+                );
+
+            default:
+                return null;
+        }
+    };
+
     return (
         <Box>
-            {blocks.map((block, index) => (
-                <Box key={index} sx={{ mt: 2, p: 2, border: '1px solid grey', borderRadius: '5px' }}>
+            {blocks.map((block, blockIndex) => (
+                <Box key={blockIndex} sx={{p: 2, borderRadius: '5px'}}>
                     <TextField
                         label="Название блока"
                         fullWidth
                         value={block.name}
-                        onChange={(e) => handleChangeBlockName(index, e.target.value)}
-                        margin="normal"
+                        onChange={(e) => handleChangeBlockName(blockIndex, e.target.value)}
                     />
                     {block.resources.map((resource, resIndex) => (
-                        <Box key={resIndex} sx={{ mt: 1, mb: 1, p: 1, border: '1px dashed grey' }}>
+                        <Box key={resIndex} sx={{mt: 3, mb: 3}}>
                             <TextField
-                                label="Тип ресурса"
-                                fullWidth
                                 select
-                                SelectProps={{ native: true }}
-                                value={resource.resourceType}
-                                onChange={(e) => handleResourceChange(index, resIndex, 'resourceType', e.target.value)}
-                                margin="normal"
-                            >
-                                <option value="TEXT">Текст</option>
-                                <option value="IMAGE">Изображение</option>
-                                <option value="VIDEO">Видео</option>
-                            </TextField>
-                            <TextField
-                                label="Содержимое ресурса"
+                                label="Тип ресурса"
+                                sx={{mb: 4}}
                                 fullWidth
-                                multiline
-                                rows={3}
-                                value={resource.content}
-                                onChange={(e) => handleResourceChange(index, resIndex, 'content', e.target.value)}
-                                margin="normal"
-                            />
-                            <Button onClick={() => handleRemoveResource(index, resIndex)} color="error">Удалить ресурс</Button>
+                                value={resource.resourceType}
+                                onChange={(e) => handleResourceChange(blockIndex, resIndex, 'resourceType', e.target.value)}
+                            >
+                                <MenuItem value="TEXT">Текст</MenuItem>
+                                <MenuItem value="IMAGE">Изображение</MenuItem>
+                                <MenuItem value="VIDEO">Видео</MenuItem>
+                            </TextField>
+                            {renderResourceInput(resource, resIndex, blockIndex)}
+                            <Button onClick={() => handleRemoveResource(blockIndex, resIndex)}>Удалить ресурс</Button>
+                            <Button onClick={() => handleAddResource(blockIndex)}>Добавить ресурс</Button>
                         </Box>
                     ))}
-                    <Button onClick={() => handleAddResource(index)}>Добавить ресурс</Button>
-                    <Button onClick={() => handleRemoveBlock(index)} color="error">Удалить блок</Button>
+                    <Button onClick={() => handleRemoveBlock(blockIndex)}>Удалить блок</Button>
                 </Box>
             ))}
             <Button onClick={handleAddBlock}>Добавить блок</Button>
