@@ -10,6 +10,10 @@ import {
     CardContent,
     CardMedia,
     Container,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
     IconButton,
     Popover,
     TextField,
@@ -41,6 +45,8 @@ const Course = ({ course }) => {
     const [anchorEl, setAnchorEl] = React.useState(null); // Состояние якоря для Popover
     const navigate = useNavigate();
     const [selectedSectionUuid, setSelectedSectionUuid] = useState(null); // Определение состояния для хранения выбранного sectionUuid
+    const [openModal, setOpenModal] = useState(false);
+    const [thumbnailUrl, setThumbnailUrl] = useState(course.thumbnailUrl || mediaCard);
 
     useEffect(() => {
         fetchAuthor(course.authorUuid).then(authorData => {
@@ -59,7 +65,8 @@ const Course = ({ course }) => {
             const updatedCourseData = {
                 ...updatedCourse,
                 name,
-                description
+                description,
+                thumbnailUrl
             };
 
             console.log('Отправляем на сервер данные для сохранения:', updatedCourseData);
@@ -109,7 +116,6 @@ const Course = ({ course }) => {
         setAnchorEl(null);
 
         // Вызываем handleSave после обновления состояния
-        handleSave();
     };
 
     const handleAddSection = () => {
@@ -154,6 +160,15 @@ const Course = ({ course }) => {
         }
     };
 
+    const handleThumbnailChange = (e) => {
+        setThumbnailUrl(e.target.value);
+    };
+
+    const saveThumbnailUrl = () => {
+        handleSave(); // Сохраняем все изменения, включая новый URL обложки
+        setOpenModal(false);
+    };
+
     if (!updatedCourse || !author) {
         return <div>Loading...</div>;
     }
@@ -194,10 +209,34 @@ const Course = ({ course }) => {
                             <Card sx={{width: '100%', backgroundColor: "green", mr: 4}}>
                                 <CardMedia
                                     component="img"
-                                    image={mediaCard}
+                                    image={thumbnailUrl || mediaCard} // Убедитесь, что mediaCard является дефолтным изображением
                                     alt="Course Cover"
                                     sx={{width: '100%', height: 'auto'}}
                                 />
+                                <Button onClick={() => setOpenModal(true)}>s</Button>
+                                <Dialog open={openModal} onClose={() => setOpenModal(false)}>
+                                    <DialogTitle>Обновить обложку курса</DialogTitle>
+                                    <DialogContent>
+                                        <TextField
+                                            fullWidth
+                                            label="URL обложки"
+                                            value={thumbnailUrl}
+                                            onChange={handleThumbnailChange}
+                                            margin="normal"
+                                        />
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={() => {
+                                            saveThumbnailUrl(); // Функция saveThumbnailUrl должна также включать handleSave если необходимо
+                                            setOpenModal(false);
+                                        }} color="primary">
+                                            Сохранить
+                                        </Button>
+                                        <Button onClick={() => setOpenModal(false)} color="primary">
+                                            Отмена
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>
                             </Card>
 
                             <Box sx={{width: '100%', display: 'flex', flexDirection: 'column'}}>
@@ -214,11 +253,11 @@ const Course = ({ course }) => {
                                 </Box>
 
 
-                                <Box sx={{display: 'flex', alignItems: 'center', mb: 1}}>
-                                    <Typography variant="body2" color="text.secondary" gutterBottom>
-                                        Время на прохождение: 60 часов<br/>
-                                    </Typography>
-                                </Box>
+                                {/*<Box sx={{display: 'flex', alignItems: 'center', mb: 1}}>*/}
+                                {/*    <Typography variant="body2" color="text.secondary" gutterBottom>*/}
+                                {/*        Время на прохождение: 60 часов<br/>*/}
+                                {/*    </Typography>*/}
+                                {/*</Box>*/}
 
                                 <Typography variant="body2" color="text.secondary" sx={{
                                     width: '100%', // Настраиваем ширину текста на всю ширину контейнера

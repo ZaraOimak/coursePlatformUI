@@ -5,6 +5,7 @@ import Topic from "../components/Topic";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import TopicService from "../services/TopicService";
+import "../styles/customMarkdownStyle.css";
 
 const TopicPage = () => {
     const { courseUuid, topicUuid } = useParams();

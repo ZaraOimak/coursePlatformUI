@@ -5,10 +5,10 @@ import {createOrUpdateTopic, deleteTopic} from '../api/topicsApi';
 import TopicBlocksManager from './TopicBlocksManager';
 import EditableTextField from "./editTextField";
 import ReactPlayer from "react-player";
-import ReactMarkdown from 'react-markdown';
-
+import MDEditor from '@uiw/react-md-editor'; // Импортируем Markdown редактор
 
 const Topic = ({topic, courseUuid}) => {
+
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isEditing] = useState(true);
@@ -110,11 +110,11 @@ const Topic = ({topic, courseUuid}) => {
                                 </Typography>
                                 <Box sx={{backgroundColor: '#e3edf8', p: 2, my: 2}}>
                                     {block.resources.map((resource, resourceIndex) => (
-                                        <div key={resourceIndex}>
+                                        <div key={resourceIndex} data-color-mode="light">
                                             {resource.resourceType === 'TEXT' && (
-                                                <ReactMarkdown>
-                                                    {resource.content}
-                                                </ReactMarkdown>
+                                                <MDEditor.Markdown
+                                                    source={resource.content}
+                                                ></MDEditor.Markdown>
                                             )}
                                             {resource.resourceType === 'IMAGE' && (
                                                 <img src={resource.content} alt={`Resource ${resourceIndex}`}

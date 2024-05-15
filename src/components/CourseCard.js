@@ -32,7 +32,7 @@ const CourseCard = ({ course, isLoggedIn }) => {
             <CardActionArea onClick={openCourse}>
                 <CardMedia
                     component="img"
-                    image={cardCover}
+                    image={course.thumbnailUrl || cardCover}
                     alt="Course Cover"
                     sx={{ height: 130, width: 245 }}
                 />

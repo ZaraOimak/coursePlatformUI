@@ -101,6 +101,7 @@ const TopicBlocksManager = ({ blocks, setBlocks }) => {
                 return (
                     <MDEditor
                         value={resource.content}
+                        data-color-mode="light"
                         onChange={(value) => handleResourceChange(blockIndex, index, 'content', value)}
                         height={600}
                     />
