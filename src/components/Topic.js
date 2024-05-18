@@ -85,7 +85,7 @@ const Topic = ({topic, courseUuid}) => {
                                 fullWidth={true}
                             />
                         </Typography>
-                        <Typography>
+                        <Typography sx ={{mb: 4}}>
                             <EditableTextField
                                 name="description"
                                 value={topicData.description}

@@ -10,10 +10,6 @@ import {
     CardContent,
     CardMedia,
     Container,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
     IconButton,
     Popover,
     TextField,
@@ -31,6 +27,7 @@ import iconTrailing from '../resources/Trailing element.svg';
 import dragIndicator from '../resources/drag_indicator.svg';
 import {useNavigate} from "react-router-dom";
 import EditableTextField from "./editTextField";
+import ModalWindow from "./ModalWindow";
 
 
 const Course = ({ course }) => {
@@ -206,40 +203,41 @@ const Course = ({ course }) => {
                         </Box>
 
                         <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'flex-start', marginBottom: 2}}>
-                            <Card sx={{width: '100%', backgroundColor: "green", mr: 4}}>
+                            <Card sx={{width: '40%', height: '100%', marginRight: 3}}>
                                 <CardMedia
                                     component="img"
-                                    image={thumbnailUrl || mediaCard} // Убедитесь, что mediaCard является дефолтным изображением
+                                    image={thumbnailUrl || mediaCard}
                                     alt="Course Cover"
-                                    sx={{width: '100%', height: 'auto'}}
+                                    sx={{width: '100%', height: 'auto', cursor: 'pointer'}}
+                                    onClick={() => setOpenModal(true)}
                                 />
-                                <Button onClick={() => setOpenModal(true)}>s</Button>
-                                <Dialog open={openModal} onClose={() => setOpenModal(false)}>
-                                    <DialogTitle>Обновить обложку курса</DialogTitle>
-                                    <DialogContent>
+                                {isLoggedIn && isEditing && (
+                                    <ModalWindow
+                                        open={openModal}
+                                        handleClose={() => setOpenModal(false)}
+                                        title="Редактирование обложки курса"
+                                        onSave={saveThumbnailUrl}
+                                    >
                                         <TextField
+                                            autoFocus
                                             fullWidth
                                             label="URL обложки"
+                                            type="text"
                                             value={thumbnailUrl}
                                             onChange={handleThumbnailChange}
-                                            margin="normal"
+                                            variant="standard"
                                         />
-                                    </DialogContent>
-                                    <DialogActions>
-                                        <Button onClick={() => {
-                                            saveThumbnailUrl(); // Функция saveThumbnailUrl должна также включать handleSave если необходимо
-                                            setOpenModal(false);
-                                        }} color="primary">
-                                            Сохранить
-                                        </Button>
-                                        <Button onClick={() => setOpenModal(false)} color="primary">
-                                            Отмена
-                                        </Button>
-                                    </DialogActions>
-                                </Dialog>
+                                    </ModalWindow>)
+                                }
                             </Card>
 
-                            <Box sx={{width: '100%', display: 'flex', flexDirection: 'column'}}>
+                            <Box sx={{
+                                width: '50%',
+                                height: '100%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                padding: '8px'
+                            }}>
                                 <Box sx={{display: 'flex', alignItems: 'center', mb: 1}}>
                                     <Avatar src={avatarImage} sx={{width: 40, height: 40, mr: 2}}/>
                                     <Box sx={{display: 'flex', flexDirection: 'column'}}>
