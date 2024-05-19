@@ -179,15 +179,9 @@ const Course = ({ course }) => {
                     <Box sx={{
                         display: 'flex',
                         flexDirection: 'column',
-                        width: '100%',
-                        maxWidth: '1000px', // Максимальная ширина контейнера курса
+                        width: '100%'
                     }}>
-                        <Box sx={{display: 'flex', justifyContent: 'left', mt: 10, mb: 2}}>
-                            <Typography variant="h5" gutterBottom sx={{
-                                width: '100%', // Настраиваем ширину текста на всю ширину контейнера
-                                maxWidth: '800px', // Максимальная ширина названия курса
-                                wordWrap: 'break-word', // Перенос слов при необходимости
-                            }}>
+                        <Box sx={{display: 'flex', justifyContent: 'left', mt: 10, mb: 3}}>
                                 {isLoggedIn && isEditing ? (
                                     <EditableTextField
                                         name="name"
@@ -195,15 +189,18 @@ const Course = ({ course }) => {
                                         onValueChange={(newValue) => setName(newValue)}
                                         placeholder="Название курса"
                                         fullWidth={true}
+                                        multiline={true}
+                                        variant="h4"
+                                        minRows={1}
+                                        maxRows={2}
                                     />
                                 ) : (
-                                    <Typography variant="h5">{name}</Typography>
+                                    <Typography variant="h4">{name}</Typography>
                                 )}
-                            </Typography>
                         </Box>
 
                         <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'flex-start', marginBottom: 2}}>
-                            <Card sx={{width: '40%', height: '100%', marginRight: 3}}>
+                            <Card sx={{width: '40%', height: '100%', marginRight: 4}}>
                                 <CardMedia
                                     component="img"
                                     image={thumbnailUrl || mediaCard}
@@ -249,22 +246,7 @@ const Course = ({ course }) => {
                                         </Typography>
                                     </Box>
                                 </Box>
-
-
-                                {/*<Box sx={{display: 'flex', alignItems: 'center', mb: 1}}>*/}
-                                {/*    <Typography variant="body2" color="text.secondary" gutterBottom>*/}
-                                {/*        Время на прохождение: 60 часов<br/>*/}
-                                {/*    </Typography>*/}
-                                {/*</Box>*/}
-
-                                <Typography variant="body2" color="text.secondary" sx={{
-                                    width: '100%', // Настраиваем ширину текста на всю ширину контейнера
-                                    maxWidth: '580px', // Максимальная ширина описания курса
-                                    height:'100%',
-                                    maxHeight:'240px',
-                                    wordWrap: 'break-word', // Перенос слов при необходимости
-                                    marginBottom: 2, // Добавляем нижний отступ для разделения элементов
-                                }}>
+                                <Box sx={{flex: 1}}>
                                     {isLoggedIn && isEditing ? (
                                         <EditableTextField
                                             name="description"
@@ -272,13 +254,15 @@ const Course = ({ course }) => {
                                             onValueChange={(newValue) => setDescription(newValue)}
                                             placeholder="Описание курса"
                                             multiline={true}
-                                            rows={4}
                                             fullWidth={true}
+                                            variant="body1"
+                                            minRows={3}
+                                            maxRows={6}
                                         />
                                     ) : (
-                                        <Typography>{description}</Typography>
+                                        <Typography variant="body1" color="text.secondary">{description}</Typography>
                                     )}
-                                </Typography>
+                                </Box>
                             </Box>
                         </Box>
                     </Box>
@@ -304,6 +288,10 @@ const Course = ({ course }) => {
                                                         onValueChange={(newValue) => handleSectionNameChange(sectionIndex, newValue)}
                                                         placeholder="Название модуля"
                                                         fullWidth={true}
+                                                        multiline={true}
+                                                        variant="h6"
+                                                        minRows={1}
+                                                        maxRows={3}
                                                     />
                                                 </Box>
                                             ) : (

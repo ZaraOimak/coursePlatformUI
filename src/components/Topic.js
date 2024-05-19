@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Button, Container, Typography} from '@mui/material';
+import {Box, Button, Container, IconButton, Typography} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import {createOrUpdateTopic, deleteTopic} from '../api/topicsApi';
 import TopicBlocksManager from './TopicBlocksManager';
 import EditableTextField from "./editTextField";
 import ReactPlayer from "react-player";
 import MDEditor from '@uiw/react-md-editor'; // Импортируем Markdown редактор
+import arrowBackIcon from '../resources/arrow_back.svg';
 
 const Topic = ({topic, courseUuid}) => {
 
@@ -76,26 +77,39 @@ const Topic = ({topic, courseUuid}) => {
             <Container>
                 {isLoggedIn && isEditing ? (
                     <>
-                        <Typography variant="h4" gutterBottom>
-                            <EditableTextField
-                                name="name"
-                                value={topicData.name}
-                                onValueChange={(value) => handleInputChange('name', value)}
-                                placeholder="Название урока"
-                                fullWidth={true}
-                            />
-                        </Typography>
-                        <Typography sx ={{mb: 4}}>
+                        <Box sx={{display: 'flex', alignItems: 'center', mt: 10, mb: 1}}>
+                            <IconButton onClick={() => navigate(`/course/edit/${courseUuid}`)} sx={{mr: 2}}>
+                                <img src={arrowBackIcon} alt="Back to course" style={{width: '24px', height: '24px'}}/>
+                            </IconButton>
+
+                            <Box sx={{flex: 1}}>
+                                <EditableTextField
+                                    name="name"
+                                    value={topicData.name}
+                                    onValueChange={(value) => handleInputChange('name', value)}
+                                    placeholder="Название урока"
+                                    fullWidth={true}
+                                    multiline={true}
+                                    minRows={1}
+                                    maxRows={3}
+                                    variant="h4"
+                                />
+                            </Box>
+
+                        </Box>
+                        <Box sx={{mb: 4}}>
                             <EditableTextField
                                 name="description"
                                 value={topicData.description}
                                 onValueChange={(value) => handleInputChange('description', value)}
                                 placeholder="Описание урока"
                                 multiline={true}
-                                rows={4}
+                                minRows={3}
+                                maxRows={10}
                                 fullWidth={true}
+                                variant="h6"
                             />
-                        </Typography>
+                        </Box>
                         <TopicBlocksManager
                             blocks={topicData.blocks}
                             setBlocks={newBlocks => handleInputChange('blocks', newBlocks)}
@@ -103,14 +117,26 @@ const Topic = ({topic, courseUuid}) => {
                     </>
                 ) : (
                     <>
+                        <Box sx={{display: 'flex', alignItems: 'center', mt: 10, mb: 5}}>
+                            <IconButton onClick={() => navigate(`/course/${courseUuid}`)} sx={{mr: 2}}>
+                                <img src={arrowBackIcon} alt="Back to course" style={{width: '24px', height: '24px'}}/>
+                            </IconButton>
+
+                            <Box sx={{flex: 1}}>
+                                <Typography variant="h4">
+                                    {topicData.name}
+                                </Typography>
+                            </Box>
+                        </Box>
+
                         {topic.blocks.map((block, index) => (
                             <Box key={index} sx={{my: 4}}>
-                                <Typography variant="h6" gutterBottom>
+                                <Typography variant="h4" gutterBottom>
                                     {block.name}
                                 </Typography>
                                 <Box sx={{backgroundColor: '#e3edf8', p: 2, my: 2}}>
                                     {block.resources.map((resource, resourceIndex) => (
-                                        <div key={resourceIndex} data-color-mode="light">
+                                        <Box key={resourceIndex} data-color-mode="light" sx={{mb:2}}>
                                             {resource.resourceType === 'TEXT' && (
                                                 <MDEditor.Markdown
                                                     source={resource.content}
@@ -121,12 +147,17 @@ const Topic = ({topic, courseUuid}) => {
                                                      style={{width: '100%', height: 'auto'}}/>
                                             )}
                                             {resource.resourceType === 'VIDEO' && (
-                                                <div style={{position: 'relative', width: '100%', height: '100%'}}>
-                                                    <ReactPlayer url={resource.content} width="100%" height="100%"
-                                                                 controls/>
+                                                <div style={{position: 'relative', width: '100%', paddingTop: '56.25%'}}>
+                                                    <ReactPlayer
+                                                        url={resource.content}
+                                                        style={{position: 'absolute', top: 0, left: 0}}
+                                                        width="100%"
+                                                        height="100%"
+                                                        controls
+                                                    />
                                                 </div>
                                             )}
-                                        </div>
+                                        </Box>
                                     ))}
                                 </Box>
                             </Box>

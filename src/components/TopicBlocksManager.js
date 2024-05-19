@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Box, Button, Container, IconButton, TextField, Typography} from '@mui/material';
+import {Box, Button, IconButton, TextField, Typography} from '@mui/material';
 import ReactPlayer from 'react-player';
 import MDEditor from '@uiw/react-md-editor';
 import MenuTypeSelector from './MenuTypeSelector';
@@ -142,7 +142,15 @@ const TopicBlocksManager = ({ blocks, setBlocks }) => {
                             margin="normal"
                         />
                         {resource.content && (
-                            <ReactPlayer url={resource.content} controls width="100%" style={{marginTop: '10px'}}/>
+                            <div style={{position: 'relative', width: '100%', paddingTop: '56.25%'}}>
+                                <ReactPlayer
+                                    url={resource.content}
+                                    style={{position: 'absolute', top: 0, left: 0}}
+                                    width="100%"
+                                    height="100%"
+                                    controls
+                                />
+                            </div>
                         )}
                         <IconButton
                             onClick={() => handleRemoveResource(blockIndex, index)}
@@ -178,9 +186,20 @@ const TopicBlocksManager = ({ blocks, setBlocks }) => {
         <Box>
             {blocks.map((block, blockIndex) => (
                 <div>
-                    <Typography variant="h6" sx={{mr: 2}}>
-                        Раздел {blockIndex + 1}
-                    </Typography>
+                    <Box sx={{
+                        backgroundColor: '#50F1BE',
+                        width: 111,
+                        height: 34,
+                        borderRadius: '1px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        p: 2
+                    }}>
+                        <Typography variant="h6" sx={{color: 'black', fontSize: '18px', lineHeight: '34px'}}>
+                            Раздел {blockIndex + 1}
+                        </Typography>
+                    </Box>
                     <Box key={blockIndex} sx={{
                         borderLeft: '7px solid #50F1BE',
                         borderTop: '7px solid #50F1BE',

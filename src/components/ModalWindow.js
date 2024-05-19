@@ -7,7 +7,7 @@ const ModalWindow = ({ open, handleClose, title, children, onSave }) => {
             open={open}
             onClose={handleClose}
             aria-labelledby="custom-dialog-title"
-            sx={{ '& .MuiDialog-paper': { minWidth: '600px', borderRadius: '8px' } }}
+            sx={{ '& .MuiDialog-paper': { maxWidth: '800px',minWidth:'500px', borderRadius: '8px' } }}
         >
             <DialogTitle id="custom-dialog-title" sx={{ fontSize: '1.25rem', fontWeight: 'bold' }}>
                 {title}
