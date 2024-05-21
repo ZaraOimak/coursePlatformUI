@@ -26,8 +26,9 @@ import addNewSection from '../resources/add_circle.svg';
 import iconTrailing from '../resources/Trailing element.svg';
 import dragIndicator from '../resources/drag_indicator.svg';
 import {useNavigate} from "react-router-dom";
-import EditableTextField from "./editTextField";
+import EditableTextField from "./EditableTextField";
 import ModalWindow from "./ModalWindow";
+import {positionSort} from "../utils/commons";
 
 
 const Course = ({ course }) => {
@@ -37,9 +38,8 @@ const Course = ({ course }) => {
     const [name, setName] = useState(course.name);
     const [description, setDescription] = useState(course.description);
     const [updatedCourse, setUpdatedCourse] = useState(course);
-    const [deletedSectionIndexes, setDeletedSectionIndexes] = useState([]);
-    const [addedSections, setAddedSections] = useState([]);
-    const [anchorEl, setAnchorEl] = React.useState(null); // Состояние якоря для Popover
+
+    const [anchorEl, setAnchorEl] = useState(null); // Состояние якоря для Popover
     const navigate = useNavigate();
     const [selectedSectionUuid, setSelectedSectionUuid] = useState(null); // Определение состояния для хранения выбранного sectionUuid
     const [openModal, setOpenModal] = useState(false);
@@ -54,6 +54,7 @@ const Course = ({ course }) => {
         if (authorUUID) {
             setIsLoggedIn(true);
         }
+
     }, [course]);
 
 
@@ -68,12 +69,8 @@ const Course = ({ course }) => {
 
             console.log('Отправляем на сервер данные для сохранения:', updatedCourseData);
 
-            const response = await createOrUpdateCourse(updatedCourseData);
-            const {data: createdOrUpdatedCourse} = response;
+            createOrUpdateCourse(updatedCourseData).then(setUpdatedCourse);
 
-            setUpdatedCourse(createdOrUpdatedCourse);
-
-            navigate(`/course/edit/${createdOrUpdatedCourse.uuid}`);
         } catch (error) {
             console.error('Ошибка при сохранении изменений:', error);
         }
@@ -95,42 +92,28 @@ const Course = ({ course }) => {
         setUpdatedCourse(updatedCourseCopy);
     };
 
-    const handleDeleteSection = (sectionIndex) => {
-        console.log("Удаляемая секция:", sectionIndex);
-        if (sectionIndex < course.sections.length) {
-            setDeletedSectionIndexes(prevIndexes => [...prevIndexes, sectionIndex]);
-        } else {
-            const addedSectionIndex = sectionIndex - course.sections.length;
-            setAddedSections(prevSections => prevSections.filter((_, index) => index !== addedSectionIndex));
-        }
+    const handleDeleteSection = async (sectionUuid) => {
+        console.log("Удаляемая секция с uuid:", sectionUuid);
 
-        // Удаляем секцию из обновленного курса
-        const updatedSections = updatedCourse.sections.filter((section, index) => index !== sectionIndex);
-        setUpdatedCourse(prevState => ({
-            ...prevState,
+        const updatedSections = updatedCourse.sections.filter(section => section.uuid !== sectionUuid);
+        const updatedCourseCopy = {
+            ...updatedCourse,
             sections: updatedSections
-        }));
+        };
         setAnchorEl(null);
-
-        // Вызываем handleSave после обновления состояния
+        createOrUpdateCourse(updatedCourseCopy).then(setUpdatedCourse);
     };
-
-    const handleAddSection = () => {
+    const handleAddSection = async () => {
         const newSection = {
             name: "Новый модуль",
             topicsIds: []
         };
 
-        // Обновляем состояние добавленных секций
-        setAddedSections(prevSections => [...prevSections, newSection]);
-
         // Добавляем новую секцию к обновленному курсу
-        const updatedCourseCopy = { ...updatedCourse };
+        const updatedCourseCopy = {...updatedCourse};
         updatedCourseCopy.sections.push(newSection);
-        setUpdatedCourse(updatedCourseCopy);
 
-        // Вызываем handleSave после обновления состояния
-        handleSave();
+        createOrUpdateCourse(updatedCourseCopy).then(setUpdatedCourse);
     };
 
     const handleClick = (event, sectionUuid) => {
@@ -169,6 +152,7 @@ const Course = ({ course }) => {
     if (!updatedCourse || !author) {
         return <div>Loading...</div>;
     }
+
 
     return (
         <>
@@ -274,7 +258,8 @@ const Course = ({ course }) => {
                     </Typography>
                     <Card>
                         <CardContent>
-                            {updatedCourse.sections.map((section, sectionIndex) => {
+
+                            {updatedCourse.sections.sort(positionSort).map((section, sectionIndex) => {
 
                                 return (
                                     <Accordion key={sectionIndex} sx={{marginBottom: 2, position: 'relative'}}>
@@ -349,7 +334,7 @@ const Course = ({ course }) => {
 
 
                                                     <Button variant="contained" onClick={
-                                                        () => handleDeleteSection(sectionIndex)
+                                                        () => handleDeleteSection(selectedSectionUuid)
                                                     }
                                                             sx={{
                                                                 backgroundColor: 'white',
@@ -363,6 +348,7 @@ const Course = ({ course }) => {
                                             </Popover>
                                         </AccordionSummary>
                                         <AccordionDetails sx={{display: 'flex', alignItems: 'center'}}>
+
                                             <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: "center"}}>
                                                 {section.topicsIds.map((topicUuid) => (
                                                     <TopicCard key={topicUuid} courseUuid={updatedCourse.uuid} topicUuid={topicUuid} />

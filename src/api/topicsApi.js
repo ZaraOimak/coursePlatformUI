@@ -18,6 +18,7 @@ export const deleteTopic = (courseUUID, topicUUID) => {
 };
 
 export const createOrUpdateTopic = (courseUUID, topicData) => {
-    return axios.post(`${baseUrl}/${courseUUID}/topics`, topicData);
+    return axios.post(`${baseUrl}/${courseUUID}/topics`, topicData)
+        .then(response => response.data);
 };
 

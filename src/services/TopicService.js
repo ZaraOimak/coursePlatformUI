@@ -1,5 +1,4 @@
-class TopicService {
-    createEmptyTopic = (sectionUuid) => {
+export const createEmptyTopic = (sectionUuid) => {
         return {
             sectionUuid: sectionUuid,
             name: '',
@@ -9,7 +8,4 @@ class TopicService {
             blocks: [],
             position: null
         };
-    };
-}
-
-export default TopicService;
+};
