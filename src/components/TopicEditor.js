@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Button, Container, Icon, IconButton, TextField, Typography} from '@mui/material';
+import {Box, Button, Container, IconButton, TextField, Typography} from '@mui/material';
 import ReactPlayer from 'react-player';
 import MDEditor from '@uiw/react-md-editor';
 import MenuTypeSelector from './MenuTypeSelector';
@@ -92,21 +92,21 @@ const TopicEditor = ({topic, courseUuid}) => {
 
     const handleAddResource = (blockIndex, resourceType) => {
 
-            const block = topicData.blocks[blockIndex];
-            block.resources.push({
-                resourceType,
-                content: '',
-                position: block.resources.length ? Math.max(...block.resources.map(res => res.position)) + 1 : 0,
-            });
+        const block = topicData.blocks[blockIndex];
+        block.resources.push({
+            resourceType,
+            content: '',
+            position: block.resources.length ? Math.max(...block.resources.map(res => res.position)) + 1 : 0,
+        });
 
-            if (resourceType === 'IMAGE' || resourceType === 'VIDEO') {
-                setModalOpen(true);
-                setModalTitle(resourceType === 'IMAGE' ? 'Добавить изображение' : 'Добавить видео');
-                setCurrentBlockIndex(blockIndex);
-                setCurrentResourceIndex(block.resources.length - 1);
-            }
+        if (resourceType === 'IMAGE' || resourceType === 'VIDEO') {
+            setModalOpen(true);
+            setModalTitle(resourceType === 'IMAGE' ? 'Добавить изображение' : 'Добавить видео');
+            setCurrentBlockIndex(blockIndex);
+            setCurrentResourceIndex(block.resources.length - 1);
+        }
 
-            createOrUpdateTopic(courseUuid, topicData).then(setTopicData);
+        createOrUpdateTopic(courseUuid, topicData).then(setTopicData);
     };
 
     const handleRemoveResource = (blockIndex, resourceIndex) => {
@@ -143,61 +143,61 @@ const TopicEditor = ({topic, courseUuid}) => {
         switch (resource.resourceType) {
             case 'IMAGE':
                 return (<Box sx={{backgroundColor: 'white', p: 2, pb: 8, borderRadius: '4px', position: 'relative'}}>
-                        <TextField
-                            fullWidth
-                            label="URL изображения"
-                            value={resource.content}
-                            onChange={(e) => handleResourceChange(blockIndex, index, e.target.value)}
-                            margin="normal"
-                        />
-                        {resource.content && (
-                            <img src={resource.content} alt="Preview" style={{maxWidth: '100%', marginTop: '10px'}}/>)}
-                        <IconButton
-                            onClick={() => handleRemoveResource(blockIndex, index)}
-                            sx={{position: 'absolute', bottom: 8, right: 8}}
-                        >
-                            <img src={deleteCourseIcon} alt="delete icon" style={{width: '24px', height: '24px'}}/>
-                        </IconButton>
+                    <TextField
+                        fullWidth
+                        label="URL изображения"
+                        value={resource.content}
+                        onChange={(e) => handleResourceChange(blockIndex, index, e.target.value)}
+                        margin="normal"
+                    />
+                    {resource.content && (
+                        <img src={resource.content} alt="Preview" style={{maxWidth: '100%', marginTop: '10px'}}/>)}
+                    <IconButton
+                        onClick={() => handleRemoveResource(blockIndex, index)}
+                        sx={{position: 'absolute', bottom: 8, right: 8}}
+                    >
+                        <img src={deleteCourseIcon} alt="delete icon" style={{width: '24px', height: '24px'}}/>
+                    </IconButton>
                 </Box>);
             case 'VIDEO':
                 return (<Box sx={{backgroundColor: 'white', p: 2, pb: 8, borderRadius: '4px', position: 'relative'}}>
-                        <TextField
-                            fullWidth
-                            label="URL видео"
-                            value={resource.content}
-                            onChange={(e) => handleResourceChange(blockIndex, index, e.target.value)}
-                            margin="normal"
-                        />
+                    <TextField
+                        fullWidth
+                        label="URL видео"
+                        value={resource.content}
+                        onChange={(e) => handleResourceChange(blockIndex, index, e.target.value)}
+                        margin="normal"
+                    />
                     {resource.content && (<div style={{position: 'relative', width: '100%', paddingTop: '56.25%'}}>
-                                <ReactPlayer
-                                    url={resource.content}
-                                    style={{position: 'absolute', top: 0, left: 0}}
-                                    width="100%"
-                                    height="100%"
-                                    controls
-                                />
+                        <ReactPlayer
+                            url={resource.content}
+                            style={{position: 'absolute', top: 0, left: 0}}
+                            width="100%"
+                            height="100%"
+                            controls
+                        />
                     </div>)}
-                        <IconButton
-                            onClick={() => handleRemoveResource(blockIndex, index)}
-                            sx={{position: 'absolute', bottom: 8, right: 8}}
-                        >
-                            <img src={deleteCourseIcon} alt="delete icon" style={{width: '24px', height: '24px'}}/>
-                        </IconButton>
+                    <IconButton
+                        onClick={() => handleRemoveResource(blockIndex, index)}
+                        sx={{position: 'absolute', bottom: 8, right: 8}}
+                    >
+                        <img src={deleteCourseIcon} alt="delete icon" style={{width: '24px', height: '24px'}}/>
+                    </IconButton>
                 </Box>);
             case 'TEXT':
                 return (<Box sx={{backgroundColor: 'white', p: 2, pb: 8, borderRadius: '4px', position: 'relative'}}>
-                        <MDEditor
-                            value={resource.content}
-                            data-color-mode="light"
-                            onChange={(value) => handleResourceChange(blockIndex, index, value)}
-                            height={200}
-                        />
-                        <IconButton
-                            onClick={() => handleRemoveResource(blockIndex, index)}
-                            sx={{position: 'absolute', bottom: 8, right: 8}}
-                        >
-                            <img src={deleteCourseIcon} alt="delete icon" style={{width: '24px', height: '24px'}}/>
-                        </IconButton>
+                    <MDEditor
+                        value={resource.content}
+                        data-color-mode="light"
+                        onChange={(value) => handleResourceChange(blockIndex, index, value)}
+                        height={200}
+                    />
+                    <IconButton
+                        onClick={() => handleRemoveResource(blockIndex, index)}
+                        sx={{position: 'absolute', bottom: 8, right: 8}}
+                    >
+                        <img src={deleteCourseIcon} alt="delete icon" style={{width: '24px', height: '24px'}}/>
+                    </IconButton>
                 </Box>);
             default:
                 return null;
@@ -271,7 +271,7 @@ const TopicEditor = ({topic, courseUuid}) => {
                             }}>
                                 <TextField
                                     label="Название раздела"
-                                    InputProps={{readOnly:false}}
+                                    InputProps={{readOnly: false}}
                                     fullWidth
                                     value={block.name}
                                     onChange={(e) => handleChangeBlockName(blockIndex, e.target.value)}
@@ -310,17 +310,29 @@ const TopicEditor = ({topic, courseUuid}) => {
                     textAlign: 'center',
                     color: 'black',
                     position: 'relative',
+                    display: 'flex', // Используем flex для правильного расположения элементов
+                    alignItems: 'center', // Центрируем по вертикали
+                    justifyContent: 'center', // Центрируем по горизонтали
                 }}>
-                    <Icon
-                        sx={{
-                            position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)'
-                        }}
-                    >
-                        <img src={addNewCourse} alt="update course icon"/>
-                    </Icon>
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginRight: '8px',
+                        flexShrink: 0, // Предотвращает сжатие иконки
+                    }}>
+                        <img src={addNewCourse} alt="update course icon" style={{width: '24px', height: '24px'}}/>
+                    </div>
+                    <span style={{
+                        display: 'block',
+                        whiteSpace: 'normal', // Позволяет тексту переноситься на несколько строк
+                        overflow: 'hidden', // Скрывает переполнение текста
+                        textOverflow: 'ellipsis', // Обеспечивает многоточие для переполненного текста
+                        maxWidth: 'calc(100% - 32px)', // Ограничивает максимальную ширину текста, оставляя место для иконки и отступа (32px - примерное значение)
+                    }}>
                     Добавить раздел
+                    </span>
                 </Button>
-
                 <ModalWindow
                     open={modalOpen}
                     handleClose={handleCancelUrl}
@@ -354,6 +366,7 @@ const TopicEditor = ({topic, courseUuid}) => {
                         borderRadius: '15px',
                         padding: '24px 20px',
                         minWidth: 'fit-content',
+                        width:'170px',
                         color: 'black',
                         backgroundColor: '#CAC4D0',
                         '&:hover': {
@@ -372,6 +385,7 @@ const TopicEditor = ({topic, courseUuid}) => {
                         borderRadius: '15px',
                         padding: '24px 20px',
                         minWidth: 'fit-content',
+                        width:'170px',
                         color: 'black',
                         backgroundColor: '#50F1BE',
                         '&:hover': {

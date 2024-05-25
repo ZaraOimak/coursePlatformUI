@@ -225,9 +225,9 @@ const Course = ({ course }) => {
                                         <Typography variant="subtitle1">
                                             Преподаватель: {author.name}
                                         </Typography>
-                                        <Typography variant="body2" color="text.secondary" gutterBottom>
-                                            Тим-лид фронтенд-разработки в Тинькофф<br/>
-                                        </Typography>
+                                        {/*<Typography variant="body2" color="text.secondary" gutterBottom>*/}
+                                        {/*    Тим-лид фронтенд-разработки в Тинькофф<br/>*/}
+                                        {/*</Typography>*/}
                                     </Box>
                                 </Box>
                                 <Box sx={{flex: 1}}>

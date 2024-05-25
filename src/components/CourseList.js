@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import {Box, Container, Grid, IconButton, Typography} from '@mui/material';
-import { fetchCourses } from "../api/coursesApi";
+import React, {useEffect, useState} from 'react';
+import {Box, Container, Grid, Typography} from '@mui/material';
+import {fetchCourses} from "../api/coursesApi";
 import CourseCard from './CourseCard';
-import { Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import {Button} from "react-bootstrap";
+import {useNavigate} from "react-router-dom";
 import addNewCourse from '../resources/add_circle.svg';
 
 
@@ -31,9 +31,16 @@ const CourseList = () => {
     }, [authorUUID, isLoggedIn]);
 
     return (
-        <div className="main-container" style={{ backgroundColor: '#e3edf8', minHeight: 'calc(100vh - 100px)', paddingBottom: '100px' }}>
+        <div className="main-container"
+             style={{backgroundColor: '#e3edf8', minHeight: 'calc(100vh - 100px)', paddingBottom: '100px'}}>
             <Container className="container mt-5">
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px', width: '1040px' }}>
+                <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '40px',
+                    width: '1040px'
+                }}>
                     <Typography variant="h3" className="text-start">
                         {isLoggedIn ? 'Мои онлайн-курсы' : 'Все онлайн-курсы'}
                     </Typography>
@@ -50,31 +57,47 @@ const CourseList = () => {
                                 borderColor: '#50F1BE',
                                 borderRadius: '15px',
                                 color: 'black',
-                                position: 'relative', // Добавляем позиционирование
+                                position: 'relative',
+                                display: 'flex', // Используем flex для правильного расположения элементов
+                                alignItems: 'center', // Центрируем по вертикали
+                                justifyContent: 'center', // Центрируем по горизонтали
+                                textAlign: 'center' // Центрируем текст
                             }}
                         >
-                            <IconButton
-                                sx={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)' }} // Выравниваем иконку по вертикали
-                            >
-                                <img src={addNewCourse} alt="update course icon" />
-                            </IconButton>
-                            Создать курс
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                marginRight: '8px'
+                            }}>
+                                <img src={addNewCourse} alt="update course icon"
+                                     style={{width: '24px', height: '24px'}}/>
+                            </div>
+                            <span style={{
+                                display: 'block',
+                                whiteSpace: 'normal',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                maxWidth: 'calc(100% - 32px)' // 32px - примерное место для иконки и отступа
+                            }}>ДОБАВИТЬ КУРС
+                            </span>
                         </Button>
+
                     )}
                 </Box>
-                <Grid container sx={{ width: 1060 }}>
+                <Grid container sx={{width: 1060}}>
                     {/* Если пользователь залогинен, отображаем только его курсы */}
                     {isLoggedIn ? (
                         authorCourses.map((course) => (
-                            <Grid item key={course.uuid} sx={{ marginTop: '30px', marginRight: '20px' }}>
-                                <CourseCard course={course} isLoggedIn={isLoggedIn} />
+                            <Grid item key={course.uuid} sx={{marginTop: '30px', marginRight: '20px'}}>
+                                <CourseCard course={course} isLoggedIn={isLoggedIn}/>
                             </Grid>
                         ))
                     ) : (
                         // Если пользователь не залогинен, отображаем все курсы
                         courses.map((course) => (
-                            <Grid item key={course.uuid} sx={{ marginTop: '30px', marginRight: '20px' }}>
-                                <CourseCard course={course} isLoggedIn={isLoggedIn} />
+                            <Grid item key={course.uuid} sx={{marginTop: '30px', marginRight: '20px'}}>
+                                <CourseCard course={course} isLoggedIn={isLoggedIn}/>
                             </Grid>
                         ))
                     )}
