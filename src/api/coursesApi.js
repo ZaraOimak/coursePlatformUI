@@ -1,6 +1,7 @@
 import axios from "axios";
+import {host} from "./common";
 
-const baseUrl = 'http://localhost:8080/courses';
+const baseUrl = `${host}/courses`;
 
 export const fetchCourses = () => {
     return axios.get(baseUrl);
