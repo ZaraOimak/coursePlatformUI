@@ -1,7 +1,8 @@
 import axios from "axios";
+import {host} from "./common";
 
 export const fetchLogin = (uuid) => {
-    return axios.get(`http://localhost:8080/authors/${uuid}`)
+    return axios.get(`${host}/authors/${uuid}`)
         .then(response => {
             if (response.data) {
                 return {isValid: true, author: response.data};

@@ -1,6 +1,7 @@
 import axios from "axios";
+import {host} from "./common";
 
-const baseUrl = 'http://localhost:8080/authors';
+const baseUrl = `${host}/authors`;
 
 export const fetchAuthors = () => {
     return axios.get(baseUrl).then(response => response.data);
