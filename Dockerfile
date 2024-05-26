@@ -8,6 +8,8 @@ WORKDIR /app
 COPY . .
 RUN npm install
 
+RUN npm install env-cmd
+
 # Build the app
 RUN npm run build
 
