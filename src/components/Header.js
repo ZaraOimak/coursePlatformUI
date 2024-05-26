@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Container, Form, FormControl, InputGroup, Modal, Navbar} from 'react-bootstrap';
+import {Button, Container, Form, Modal, Navbar} from 'react-bootstrap';
 import logo from '../resources/Logo.svg';
-import searchIcon from '../resources/Search.svg';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CustomButton from './CustomButton';
 import {fetchLogin} from "../api/securityApi";
+import {useLocation, useNavigate} from "react-router-dom";
 
 const Header = () => {
-    const [searchText, setSearchText] = useState("");
+    const navigate = useNavigate();
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+    useLocation();
     useEffect(() => {
         if (localStorage.getItem('authorUUID')) {
             setIsLoggedIn(true);
@@ -57,6 +57,10 @@ const Header = () => {
         window.location.reload();
     };
 
+    const openSandbox = () =>{
+        navigate(`/sandbox`)
+    };
+
     return (
         <>
             <Navbar sticky="top" collapseOnSelect expand="md" className='custom-navbar' variant="dark">
@@ -67,34 +71,18 @@ const Header = () => {
                     <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Form className='d-flex flex-column flex-md-row align-items-center w-100'>
-                            <InputGroup className="position-relative mb-2 mb-md-0">
-                                <InputGroup.Text style={{backgroundColor: '#0D3040'}}>
-                                    <img src={searchIcon} alt="Search" className="search-icon"
-                                         style={{backgroundColor: '#0D3040'}}/>
-                                </InputGroup.Text>
-                                <FormControl
-                                    value={searchText}
-                                    type="text"
-                                    placeholder="Найти курс или преподавателя"
-                                    style={{
-                                        maxWidth: '523px',
-                                        height: '53px',
-                                        color: 'white',
-                                        border: '1px solid white',
-                                        backgroundColor: '#0D3040',
-                                        '::placeholder': {
-                                            color: 'white',
-                                            opacity: 1,
-                                        }
-                                    }}
-                                />
-                            </InputGroup>
                             <div className="ms-md-auto">
                                 {isLoggedIn ? (
-                                    <CustomButton onClick={handleLogout}>Выход</CustomButton>
+                                    <div>
+                                        <CustomButton onClick={openSandbox}> Редактор кода </CustomButton>
+                                        <CustomButton onClick={handleLogout}>Выход</CustomButton>
+                                    </div>
                                 ) : (
-                                    <CustomButton onClick={handleShowRegisterModal}>Я
+                                    <div>
+                                        <CustomButton onClick={openSandbox}> Редактор кода </CustomButton>
+                                        <CustomButton onClick={handleShowRegisterModal}>Я
                                         преподаватель</CustomButton>
+                                    </div>
                                 )}
                             </div>
                         </Form>
@@ -114,7 +102,8 @@ const Header = () => {
                         <Form.Group controlId="password" className="w-75">
                             <Form.Control type="password" placeholder="Пароль" name="password" className="mb-3"/>
                         </Form.Group>
-                        <Button type="submit" variant="primary" className="w-75" style={{backgroundColor: '#50F1BE'}}>
+                        <Button type="submit" variant="primary" className="w-75"
+                                style={{backgroundColor: '#50F1BE', fontSize: '18px', fontWeight: 'bold'}}>
                             Войти в аккаунт
                         </Button>
                     </Form>

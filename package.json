@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@codesandbox/sandpack-react": "^2.13.10",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
+    "@monaco-editor/react": "^4.6.0",
     "@mui/icons-material": "^5.15.11",
     "@mui/material": "^5.15.11",
     "@testing-library/jest-dom": "^6.4.2",
