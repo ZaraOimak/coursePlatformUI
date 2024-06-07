@@ -22,7 +22,7 @@ const TopicCard = ({ courseUuid, topicUuid }) => {
     }
 
     return (
-        <Box sx={{ minWidth: 326, maxWidth: 326, flexGrow: 1, margin: 1 }}>
+        <Box sx={{ width:'80%', flexGrow: 1, margin: 1 }}>
             <Card
                 sx={{
                     height: '100%',

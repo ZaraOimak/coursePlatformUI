@@ -12,7 +12,7 @@ const MenuTypeSelector = ({onResourceTypeChange}) => {
             backgroundColor: '#e0e0e0',
             padding: '10px',
             borderRadius: '8px',
-            width: '204px',
+            maxWidth:'204px',
             height: '56px'
         }}>
             <Tooltip title="Добавить изображение" placement="top">

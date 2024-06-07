@@ -40,7 +40,7 @@ const Header = () => {
                 setIsLoggedIn(true);
                 alert("Авторизация успешна, добро пожаловать " + data.author.name);
                 handleCloseRegisterModal();
-                window.location.reload();
+                navigate("/");
             } else {
                 alert(`Неуспешная авторизация: ${data.error}`);
             }
@@ -54,7 +54,7 @@ const Header = () => {
         localStorage.removeItem('authorUUID');
         setIsLoggedIn(false)
         alert("You have been logged out.");
-        window.location.reload();
+        navigate("/");
     };
 
     const openSandbox = () =>{
