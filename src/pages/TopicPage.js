@@ -14,14 +14,10 @@ const TopicPage = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const sectionUuid = queryParams.get('sectionUuid');
-    const [topic, setTopic] = useState(null);
-
+    const [topic, setTopic] = useState(createEmptyTopic(sectionUuid));
 
     useEffect(() => {
-        if(!topicUuid){
-            setTopic(createEmptyTopic(sectionUuid));
-        }
-        else{
+        if(topicUuid){
             fetchTopic(courseUuid,topicUuid).then((topicData) => {
                 setTopic(topicData);
             });

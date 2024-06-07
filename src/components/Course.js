@@ -176,7 +176,7 @@ const Course = ({ course }) => {
                                         multiline={true}
                                         variant="h4"
                                         minRows={1}
-                                        maxRows={2}
+                                        maxRows={3}
                                     />
                                 ) : (
                                     <Typography variant="h4">{name}</Typography>
@@ -220,14 +220,11 @@ const Course = ({ course }) => {
                                 padding: '8px'
                             }}>
                                 <Box sx={{display: 'flex', alignItems: 'center', mb: 1}}>
-                                    <Avatar src={avatarImage} sx={{width: 40, height: 40, mr: 2}}/>
+                                    <Avatar src={author.avatar || avatarImage} sx={{width: 40, height: 40, mr: 2}}/>
                                     <Box sx={{display: 'flex', flexDirection: 'column'}}>
                                         <Typography variant="subtitle1">
                                             Преподаватель: {author.name}
                                         </Typography>
-                                        {/*<Typography variant="body2" color="text.secondary" gutterBottom>*/}
-                                        {/*    Тим-лид фронтенд-разработки в Тинькофф<br/>*/}
-                                        {/*</Typography>*/}
                                     </Box>
                                 </Box>
                                 <Box sx={{flex: 1}}>

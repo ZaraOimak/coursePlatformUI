@@ -39,9 +39,9 @@ const CourseList = () => {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     marginBottom: '40px',
-                    width: '1040px'
+                    width: '100%'
                 }}>
-                    <Typography variant="h3" className="text-start">
+                    <Typography variant="h4" className="text-start">
                         {isLoggedIn ? 'Мои онлайн-курсы' : 'Все онлайн-курсы'}
                     </Typography>
                     {isLoggedIn && (
@@ -85,8 +85,8 @@ const CourseList = () => {
 
                     )}
                 </Box>
-                <Grid container sx={{width: 1060}}>
-                    {/* Если пользователь залогинен, отображаем только его курсы */}
+                <Grid container sx={{width: '100%'}}>
+
                     {isLoggedIn ? (
                         authorCourses.map((course) => (
                             <Grid item key={course.uuid} sx={{marginTop: '30px', marginRight: '20px'}}>
@@ -94,7 +94,6 @@ const CourseList = () => {
                             </Grid>
                         ))
                     ) : (
-                        // Если пользователь не залогинен, отображаем все курсы
                         courses.map((course) => (
                             <Grid item key={course.uuid} sx={{marginTop: '30px', marginRight: '20px'}}>
                                 <CourseCard course={course} isLoggedIn={isLoggedIn}/>

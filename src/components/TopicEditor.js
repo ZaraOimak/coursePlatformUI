@@ -38,9 +38,8 @@ const TopicEditor = ({topic, courseUuid}) => {
     const handleSaveTopic = () => {
         try {
             createOrUpdateTopic(courseUuid, topicData).then(response => {
-                console.log(response)
                 if (!topicData.uuid) {
-                    navigate(`/course/${courseUuid}/topic/edit/${response.data.uuid}`);
+                    navigate(`/course/${courseUuid}/topic/edit/${response.uuid}`);
                 }
             });
         } catch (error) {
